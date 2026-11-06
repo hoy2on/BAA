@@ -1,0 +1,6 @@
+interface:
+  display_name: "Apple 모바일 OS 연동"
+  short_description: "Apple 모바일 OS 연동 작업을 현재 프로젝트 구조와 대상 환경에 맞춰 수행합니다"
+  default_prompt: "$baa-apple-os-integrations로 배정된 플랫폼 작업의 해당 단계를 수행해 주세요."
+policy:
+  allow_implicit_invocation: false

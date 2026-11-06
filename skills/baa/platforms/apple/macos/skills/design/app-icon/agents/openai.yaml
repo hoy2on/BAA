@@ -1,0 +1,5 @@
+interface:
+  display_name: "BAA macos app-icon"
+  short_description: "BAA macos 플랫폼의 app-icon 작업 절차"
+policy:
+  allow_implicit_invocation: false

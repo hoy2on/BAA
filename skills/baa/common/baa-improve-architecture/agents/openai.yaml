@@ -1,0 +1,6 @@
+interface:
+  display_name: "BAA improve-architecture"
+  short_description: "BAA의 공통 improve-architecture 단계를 선택 플랫폼의 구현과 연결합니다"
+  default_prompt: "$baa-improve-architecture로 배정된 단계와 플랫폼 맥락을 유지해 작업해 주세요."
+policy:
+  allow_implicit_invocation: false

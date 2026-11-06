@@ -1,0 +1,4 @@
+interface:
+  display_name: "BAA Android"
+  short_description: "Android 앱 작업을 해당 플랫폼 전문 절차로 진행합니다"
+  default_prompt: "$baa-android로 Android 범위에서 대상과 작업 단계를 판단해 진행해 주세요."

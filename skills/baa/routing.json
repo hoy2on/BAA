@@ -1,0 +1,145 @@
+{
+  "entrypoints": {
+    "baa": [
+      "macos",
+      "ios",
+      "ipados",
+      "android",
+      "windows"
+    ],
+    "baa-apple": [
+      "macos",
+      "ios",
+      "ipados"
+    ],
+    "baa-android": [
+      "android"
+    ],
+    "baa-windows": [
+      "windows"
+    ]
+  },
+  "common": {
+    "research": "common/baa-research",
+    "app-brief": "common/baa-app-brief",
+    "user-stories": "common/baa-user-stories",
+    "ux-design": "common/baa-ux-design",
+    "improve-architecture": "common/baa-improve-architecture",
+    "improve-loop": "common/baa-improve-loop"
+  },
+  "platforms": {
+    "macos": {
+      "router": "platforms/apple/macos/skills/start/baa-macos",
+      "clone": "platforms/apple/macos/skills/plan/clone",
+      "scaffold": "platforms/apple/macos/skills/start/new-mac-app",
+      "code": "platforms/apple/macos/skills/code/swift-swiftui",
+      "os-integrations": "platforms/apple/macos/skills/code/os-integrations",
+      "performance": "platforms/apple/macos/skills/code/performance",
+      "agent-cli": "platforms/apple/macos/skills/code/agent-cli",
+      "native-design": "platforms/apple/macos/skills/design/mac-design",
+      "design-system": "platforms/apple/macos/skills/design/design-system",
+      "layout-grid": "platforms/apple/macos/skills/design/layout-grid",
+      "design-kit": "platforms/apple/macos/skills/design/design-kit",
+      "design-from-app": "platforms/apple/macos/skills/design/design-from-app",
+      "app-icon": "platforms/apple/macos/skills/design/app-icon",
+      "build-and-verify": "platforms/apple/macos/skills/ship/build-and-verify",
+      "test": "platforms/apple/macos/skills/ship/test-mac-app"
+    },
+    "windows": {
+      "router": "platforms/windows/skills/start/baa-windows",
+      "clone": "platforms/windows/skills/plan/clone",
+      "scaffold": "platforms/windows/skills/start/new-windows-app",
+      "code": "platforms/windows/skills/code/csharp-winui",
+      "os-integrations": "platforms/windows/skills/code/os-integrations",
+      "performance": "platforms/windows/skills/code/performance",
+      "agent-cli": "platforms/windows/skills/code/agent-cli",
+      "native-design": "platforms/windows/skills/design/windows-design",
+      "design-system": "platforms/windows/skills/design/design-system",
+      "layout-grid": "platforms/windows/skills/design/layout-grid",
+      "design-kit": "platforms/windows/skills/design/design-kit",
+      "design-from-app": "platforms/windows/skills/design/design-from-app",
+      "app-icon": "platforms/windows/skills/design/app-icon",
+      "build-and-verify": "platforms/windows/skills/ship/build-and-verify",
+      "test": "platforms/windows/skills/ship/test-windows-app",
+      "distribute": "platforms/windows/skills/ship/distribute"
+    },
+    "ios": {
+      "clone": "platforms/apple/shared/skills/baa-apple-clone",
+      "scaffold": "platforms/apple/shared/skills/baa-apple-scaffold",
+      "code": "platforms/apple/shared/skills/baa-apple-code",
+      "design-system": "platforms/apple/shared/skills/baa-apple-design-system",
+      "design-kit": "platforms/apple/shared/skills/baa-apple-design-kit",
+      "design-from-app": "platforms/apple/shared/skills/baa-apple-design-from-app",
+      "layout-grid": "platforms/apple/shared/skills/baa-apple-layout-grid",
+      "app-icon": "platforms/apple/shared/skills/baa-apple-app-icon",
+      "os-integrations": "platforms/apple/shared/skills/baa-apple-os-integrations",
+      "performance": "platforms/apple/shared/skills/baa-apple-performance",
+      "build-and-verify": "platforms/apple/shared/skills/baa-apple-build-and-verify",
+      "test": "platforms/apple/shared/skills/baa-apple-test",
+      "agent-cli": "platforms/apple/shared/skills/baa-apple-agent-cli",
+      "distribute": "platforms/apple/shared/skills/baa-apple-distribute",
+      "native-design": "platforms/apple/ios/skills/baa-ios-design",
+      "router": "platforms/apple/ios/skills/baa-ios"
+    },
+    "ipados": {
+      "clone": "platforms/apple/shared/skills/baa-apple-clone",
+      "scaffold": "platforms/apple/shared/skills/baa-apple-scaffold",
+      "code": "platforms/apple/shared/skills/baa-apple-code",
+      "design-system": "platforms/apple/shared/skills/baa-apple-design-system",
+      "design-kit": "platforms/apple/shared/skills/baa-apple-design-kit",
+      "design-from-app": "platforms/apple/shared/skills/baa-apple-design-from-app",
+      "layout-grid": "platforms/apple/shared/skills/baa-apple-layout-grid",
+      "app-icon": "platforms/apple/shared/skills/baa-apple-app-icon",
+      "os-integrations": "platforms/apple/shared/skills/baa-apple-os-integrations",
+      "performance": "platforms/apple/shared/skills/baa-apple-performance",
+      "build-and-verify": "platforms/apple/shared/skills/baa-apple-build-and-verify",
+      "test": "platforms/apple/shared/skills/baa-apple-test",
+      "agent-cli": "platforms/apple/shared/skills/baa-apple-agent-cli",
+      "distribute": "platforms/apple/shared/skills/baa-apple-distribute",
+      "native-design": "platforms/apple/ipados/skills/baa-ipados-design",
+      "router": "platforms/apple/ipados/skills/baa-ipados"
+    },
+    "android": {
+      "clone": "platforms/android/skills/baa-android-clone",
+      "scaffold": "platforms/android/skills/baa-android-scaffold",
+      "code": "platforms/android/skills/baa-android-code",
+      "native-design": "platforms/android/skills/baa-android-native-design",
+      "design-system": "platforms/android/skills/baa-android-design-system",
+      "design-kit": "platforms/android/skills/baa-android-design-kit",
+      "design-from-app": "platforms/android/skills/baa-android-design-from-app",
+      "layout-grid": "platforms/android/skills/baa-android-layout-grid",
+      "app-icon": "platforms/android/skills/baa-android-app-icon",
+      "os-integrations": "platforms/android/skills/baa-android-os-integrations",
+      "performance": "platforms/android/skills/baa-android-performance",
+      "build-and-verify": "platforms/android/skills/baa-android-build-and-verify",
+      "test": "platforms/android/skills/baa-android-test",
+      "agent-cli": "platforms/android/skills/baa-android-agent-cli",
+      "distribute": "platforms/android/skills/baa-android-distribute",
+      "router": "platforms/android/skills/baa-android"
+    }
+  },
+  "references": {
+    "macos": {
+      "ux-design": [
+        "platforms/apple/macos/skills/design/ux-design/writing.md",
+        "platforms/apple/macos/skills/design/ux-design/presentation.md",
+        "platforms/apple/macos/skills/design/ux-design/accessibility.md",
+        "platforms/apple/macos/skills/design/ux-design/ai-features.md"
+      ],
+      "improve-architecture": [
+        "platforms/apple/macos/skills/code/improve-architecture/architecture.md"
+      ]
+    },
+    "windows": {
+      "ux-design": [
+        "platforms/windows/skills/design/ux-design/writing.md",
+        "platforms/windows/skills/design/ux-design/presentation.md",
+        "platforms/windows/skills/design/ux-design/accessibility.md",
+        "platforms/windows/skills/design/ux-design/ai-features.md"
+      ],
+      "improve-architecture": [
+        "platforms/windows/skills/code/improve-architecture/architecture.md"
+      ]
+    }
+  }
+}

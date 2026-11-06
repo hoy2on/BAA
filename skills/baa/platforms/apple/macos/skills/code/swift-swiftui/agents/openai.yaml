@@ -1,0 +1,5 @@
+interface:
+  display_name: "BAA macos swift-swiftui"
+  short_description: "BAA macos 플랫폼의 swift-swiftui 작업 절차"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,4 @@
+interface:
+  display_name: "BAA — Build Any App"
+  short_description: "요청과 프로젝트로 플랫폼을 판단하고 Apple·Android·Windows 전문 절차를 연결합니다"
+  default_prompt: "$baa로 요청과 프로젝트에서 대상을 판단하고 모호할 때만 질문하여 필요한 전문 스킬을 연결해 앱 작업을 진행해 주세요."

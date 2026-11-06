@@ -1,0 +1,5 @@
+interface:
+  display_name: "BAA windows design-kit"
+  short_description: "BAA windows 플랫폼의 design-kit 작업 절차"
+policy:
+  allow_implicit_invocation: false

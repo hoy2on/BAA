@@ -1,0 +1,17 @@
+{
+  "name": "baa",
+  "description": "BAA 중앙 라우터와 Apple·Android·Windows 전문 스킬로 앱 기획·구현·디자인·검증을 진행합니다.",
+  "author": {
+    "name": "Hoyeon Kim",
+    "url": "https://github.com/hoy2on"
+  },
+  "license": "MIT",
+  "skills": [
+    "./skills/baa",
+    "./skills/baa-apple",
+    "./skills/baa-android",
+    "./skills/baa-windows"
+  ],
+  "homepage": "https://github.com/hoy2on/BAA",
+  "repository": "https://github.com/hoy2on/BAA"
+}
