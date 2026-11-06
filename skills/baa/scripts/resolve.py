@@ -57,6 +57,8 @@ def resolve_name(name, root=ROOT, entrypoint=None):
         raise ValueError(f'public entrypoint is not an internal procedure: {name}')
     for platform in allowed_platforms(catalog, entrypoint):
         paths.update(catalog['platforms'][platform].values())
+        for references in catalog.get('references', {}).get(platform, {}).values():
+            paths.update(str(Path(item).parent) for item in references if Path(item).name == 'PROCEDURE.md')
     matches = [result for path in sorted(paths) if (result := load_skill(path, root))['name'] == name]
     if len(matches) != 1:
         raise ValueError(f'unknown or duplicate internal skill: {name}')

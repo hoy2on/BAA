@@ -1,0 +1,6 @@
+interface:
+  display_name: "Android App Icon"
+  short_description: "Android App Icon procedure for the assigned platform and task."
+  default_prompt: "Use $baa-android-app-icon for the assigned stage. Preserve the platform context and scope, and respond in the user's language."
+policy:
+  allow_implicit_invocation: false

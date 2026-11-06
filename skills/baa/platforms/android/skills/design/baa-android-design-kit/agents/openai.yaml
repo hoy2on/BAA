@@ -1,0 +1,6 @@
+interface:
+  display_name: "Android Design Kit"
+  short_description: "Android Design Kit procedure for the assigned platform and task."
+  default_prompt: "Use $baa-android-design-kit for the assigned stage. Preserve the platform context and scope, and respond in the user's language."
+policy:
+  allow_implicit_invocation: false

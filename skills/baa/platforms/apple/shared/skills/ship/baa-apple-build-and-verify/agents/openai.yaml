@@ -1,0 +1,6 @@
+interface:
+  display_name: "Apple mobile Build And Verify"
+  short_description: "Apple mobile Build And Verify procedure for the assigned platform and task."
+  default_prompt: "Use $baa-apple-build-and-verify for the assigned stage. Preserve the platform context and scope, and respond in the user's language."
+policy:
+  allow_implicit_invocation: false

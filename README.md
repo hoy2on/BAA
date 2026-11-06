@@ -80,7 +80,7 @@ For an existing project, “all” means the supported targets within the comman
 | Android | Kotlin, Compose, and Views; Android design, OS integration, performance, Gradle and adb verification, and distribution preparation |
 | Windows | BAWA-based C# and WinUI; Windows design, OS integration, performance, builds, tests, and distribution |
 
-Stages may share names without sharing platform implementations. Existing UIKit, WPF, Views, or cross-platform apps are not converted to match a template. Where the original macOS pack has no distribution procedure, BAA inspects the project's actual release workflow.
+Stages may share names without sharing platform implementations. Existing UIKit, WPF, Views, or cross-platform apps are not converted to match a template. BAA's macOS distribution procedure inspects the project's actual direct-distribution or App Store release workflow.
 
 ## Install
 
@@ -195,9 +195,17 @@ skills/
     routing.json
     common/            Shared procedures
     platforms/
-      apple/           macOS, iOS, iPadOS, and shared mobile resources
-      android/
-      windows/
+      apple/
+        shared/skills/  Reusable iOS/iPadOS base procedures by workflow stage
+        macos/skills/   macOS procedures, grouped by workflow stage
+        ios/
+          skills/      iOS specialists: start, plan, code, design, ship
+          specs/       iPhone example build plans
+        ipados/
+          skills/      iPadOS specialists: start, plan, code, design, ship
+          specs/       iPad example build plans
+      android/skills/   Android procedures, grouped by workflow stage
+      windows/skills/   Windows procedures, grouped by workflow stage
     scripts/resolve.py
     LICENSES/          Original BAMA and BAWA licenses
     UPSTREAM.json      Imported upstream commits
@@ -209,6 +217,26 @@ tests/                 Routing, installation, and dev-app protection checks
 ```
 
 The central skill folder contains its procedures, references, tools, templates, and attribution. Plugin installations and skills CLI folder copies therefore use the same resources.
+
+Procedures use `start` (entry point and scaffolding), `plan` (reference-app analysis), `code` (implementation, OS integration, performance, and agent CLI), `design` (native UI and design assets), and `ship` (build, test, and distribution). These are task categories, not a required sequence: existing-app work starts at the relevant stage. Platform-independent planning and UX stay in `common/`.
+
+Each Apple OS has its own specialist procedures. iOS and iPadOS each provide all five stages and their own specs; their procedures combine device-specific requirements with reusable bases in `apple/shared/skills/<stage>/`. The resolver returns the OS procedure as `path` and its shared base as `references`. macOS retains its BAMA-based AppKit tools, templates, and desktop specs; those are not interchangeable with UIKit/mobile procedures. `routing.json` is the source of truth for each role's location.
+
+Optional example plans: [iOS specs](skills/baa/platforms/apple/ios/specs/README.md), [iPadOS specs](skills/baa/platforms/apple/ipados/specs/README.md), and [macOS specs](skills/baa/platforms/apple/macos/specs/README.md). Existing-app work does not require these examples.
+
+The mobile `scaffold` role resolves to `start/new-ios-app`, `start/new-ipados-app`, or `start/new-android-app`, matching the desktop new-app folder naming. Apple shares an Xcode project, app entry point, title model, XCTest/XCUITest targets, and build script in `apple/shared/skills/start/new-apple-app/template`; each OS supplies its own SwiftUI screen. Android supplies a native Kotlin/Compose app, Gradle Wrapper, manifest/resources, and unit/instrumentation tests. These starters apply to new projects only.
+
+```sh
+python3 skills/baa/scripts/new-app.py ios MyPhoneApp com.example.myphoneapp ~/Developer
+python3 skills/baa/scripts/new-app.py ipados MyPadApp com.example.mypadapp ~/Developer
+python3 skills/baa/scripts/new-app.py android MyAndroidApp com.example.myandroidapp ~/Developer
+```
+
+The generator preserves existing briefs, refuses conflicting files and existing projects, and does not install apps or run Git commands. Apple starters use Swift 6, Xcode 16+, and iOS/iPadOS 17.0+ (`--min-os` can select a higher minimum). The Android starter pins Gradle 8.14.3, AGP 8.11.2, Kotlin 2.3.20, Compose BOM 2025.09.00, compile/target SDK 36, and minSdk 26; confirm the installed toolchain before using it. Existing projects keep their versions. Android's first build may download dependencies; Gradle wrapper licensing is preserved in the template. Product icons and physical-device signing remain follow-up work.
+
+The [platform coverage review](docs/platform-coverage.md) records the filled gaps and intentional differences. Mobile UX/architecture, integration/performance recipes, existing-app verification and screenshot comparison references are connected through the router. Android example plans are in [Android specs](skills/baa/platforms/android/specs/README.md).
+
+For UI work, BAA uses the [design-intelligence workflow](skills/baa/common/baa-ux-design/design-intelligence.md). When ui-ux-pro-max is installed, it uses the actual local skill's relevant searches, validates their platform/stack fit, and passes accepted decisions to platform specialists. New visual direction uses a coherent design-system candidate; existing-screen fixes keep the current system and use a targeted query. The coordinator preserves existing master/page decisions and writes shared changes once. Native-aware [UI review](skills/baa/common/baa-ux-design/ui-review.md) connects to verification. BAA's packaged criteria remain available without the external skill; its search database is not bundled or auto-installed.
 
 ## Development and verification
 

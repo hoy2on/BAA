@@ -1,6 +1,0 @@
-interface:
-  display_name: "BAA iPadOS 담당자"
-  short_description: "iPadOS 플랫폼 작업을 공통 및 전용 스킬로 연결해 수행합니다"
-  default_prompt: "$baa-ipados로 배정받은 iPadOS 작업을 현재 단계부터 수행해 주세요."
-policy:
-  allow_implicit_invocation: false

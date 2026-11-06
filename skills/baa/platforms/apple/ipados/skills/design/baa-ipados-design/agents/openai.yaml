@@ -1,0 +1,6 @@
+interface:
+  display_name: "iPadOS native design"
+  short_description: "iPadOS native design procedure for the assigned platform and task."
+  default_prompt: "Use $baa-ipados-design for the assigned stage. Preserve the platform context and scope, and respond in the user's language."
+policy:
+  allow_implicit_invocation: false

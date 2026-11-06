@@ -1,58 +1,54 @@
 ---
 name: baa-ux-design
-description: 사용자 행동의 명칭·흐름·화면 형태·상태·접근성을 공통으로 설계합니다. story의 UX 블록이나 기존 화면의 사용성 검토에 사용합니다.
+description: Design action names, flows, surfaces, states, copy and accessibility for story UX blocks and existing-screen usability reviews.
 ---
 
 # UX design
 
-[공통 실행 규칙](../../EXECUTION.md)을 먼저 읽는다. BAA가 전달한 선택 플랫폼, 작업 목적, 현재 단계, 파일 소유권과 완료 기준을 유지한다. 플랫폼을 다시 선택하거나 전체 기획을 반복하지 않는다.
+Read the [shared execution rules](../../EXECUTION.md). Inherit BAA's selected platform, purpose, current stage, file ownership and acceptance; do not repeat target selection or restart planning. Respond in the user's language and follow project documentation/localization conventions.
 
-후속 스킬은 실행 패키지 루트에서 `python3 scripts/resolve.py --entrypoint <호출 진입점> --platform <선택 플랫폼> --step <단계>`로 조회한다. 반환된 이름과 문서 경로를 사용하며 원본 BAMA·BAWA의 짧은 이름이나 외부 설치 경로를 추정하지 않는다. 반환된 path의 PROCEDURE.md를 읽어 수행한다. 내부 이름을 Skill 도구나 슬래시 명령으로 호출하지 않는다. resolver 결과에 `references`가 있으면 선택 플랫폼의 원본 부속자료 중 현재 작업에 필요한 파일만 읽는다.
+Resolve follow-up roles with `python3 scripts/resolve.py --entrypoint <entrypoint> --platform <target> --step <role>` from the runtime root. Use the returned name/path, not upstream short names or external installations. Read the returned PROCEDURE.md, not a Skill-tool/slash command. Read relevant returned references when present.
 
-공유 문서의 최종 편집자는 BAA 조율자 한 명이다. 플랫폼 담당자는 공유 BRIEF/STORIES/GLOSSARY/연구·검토 문서를 동시에 수정하지 않고 변경 제안과 근거를 조율자에게 반환한다. 단독 실행에서는 현재 담당자가 그 역할을 맡는다.
+The coordinator is the sole editor of shared BRIEF/STORIES/GLOSSARY/research/review documents. Platform owners return proposals and evidence, not concurrent edits. In solo execution, the current worker holds that role.
 
-원본의 이름 → 흐름 → surface → 상태 → 문구 → 보조 설명 → 접근성 → UX 기록 순서를 유지한다. 공통으로 결정할 의미와 플랫폼별로 달라야 할 표현을 분리한다.
+Use BAMA/BAWA's name → flow → surface → states → copy → supporting explanation → accessibility → UX record. Separate shared meaning from native expression.
+Apply [design intelligence](design-intelligence.md) for visual/usability decisions. Evaluate coherent candidates for new direction; target only the relevant outcome for existing-screen problems. Do not regenerate searches/MASTER if the coordinator already supplied verified decisions. Use [UI review](ui-review.md) for changed UI handoff.
 
 ## 1. Read and name
 
-기존 BRIEF, GLOSSARY, 해당 story·화면과 참고 자료를 읽는다. 기존 화면 검토에는 새 기획 문서를 만들지 않는다. 제품 용어는 버튼·제목·오류에서 일치시키고 시스템 행동의 명칭·대소문자는 각 플랫폼 관례와 제품의 번역 규칙을 따른다. 문구는 사용자 행동을 설명하고 내부 모델·기술 이름을 노출하지 않는다.
-
-조율자는 공통 용어와 의미를 관리하고, 플랫폼 담당자는 새 용어·표현 차이를 제안한다. 번역 문자열을 같은 파일에서 동시에 편집하지 않는다.
+Read existing BRIEF, GLOSSARY, relevant story/screens and references. Do not create a new plan for an existing-screen review. Keep product terminology consistent across controls/headings/errors; preserve platform action naming/capitalization and project localization conventions. Copy describes user actions, not internal models/technology.
+The coordinator owns common terms; platform owners propose new terms/native differences. Do not edit the same localization file concurrently.
 
 ## 2. Map the flow
 
-모든 진입점부터 완료와 복귀까지 한 줄로 적는다. 현재 값을 바꾸는 데 불필요한 화면 이동을 추가하지 않는다. 입력 초기값, 포커스·키보드, 저장·취소, 실패 복구와 destructive action의 undo/확인을 명시한다. touch-only 플랫폼에서 hover나 키보드를 필수 진입점으로 만들지 않는다.
+Write entry → completion → return for every entrypoint. Avoid unnecessary navigation to change an existing value. Define initial values, focus/keyboard, save/cancel, failure recovery and destructive-action confirmation/undo. Touch-only platforms must not require hover/keyboard. Keep essential help and actions discoverable without hover.
 
 ## 3. Pick the surface
 
-현재 값 수정은 가능하면 inline, 짧은 선택은 관련 control 근처, 독립적인 입력 작업은 해당 플랫폼의 modal/화면, 지속적으로 돌아오는 기능은 기존 탐색 구조에 둔다. 상세 선택과 코드는 선택 플랫폼의 `native-design`을 조회해 확인한다. Mac의 inspector/sheet, Windows의 flyout/ContentDialog, 모바일의 sheet·화면 전환을 같은 API로 취급하지 않는다. 반응형·다중 창 조건도 전달한다.
-
-정보만 알리는 상태는 불필요한 경고창으로 만들지 않는다. 모달 제목과 완료 버튼은 수행할 행동을 설명하며, 입력 손실이 있을 때 복귀·닫기 동작을 분명히 한다. 중첩 modal 가능 여부와 표시 제약은 해당 플랫폼 구현에서 확인한다.
+Prefer inline edits for current values, nearby choices for short selections, platform-appropriate screens/modals for independent tasks, and established navigation for recurring features. Resolve native-design for specific controls/API/layout and adaptive/multi-window requirements. Mac inspectors/sheets, Windows flyouts/ContentDialog and mobile navigation/sheets are not interchangeable APIs.
+Do not turn informational status into needless alerts. Modal titles/completion buttons describe the action; define dismissal/return when input can be lost. Confirm actual nested-presentation constraints.
 
 ## 4. Cover states and words
 
-수정 화면의 empty, loading, error, long-content, success/undo 중 해당 상태의 내용·행동·모양을 정한다. 진행률을 알면 정확한 진행률을, 모르면 실제로 대기 중임을 표현한다. 오류는 위치, 원인 범위와 복구 행동을 알리고 사용자 입력은 보존한다. 의미를 색상 하나나 순간 애니메이션으로만 전달하지 않는다.
-
-버튼은 행동을, confirmation은 대상과 결과를 구체적으로 표시한다. 부정확한 추측을 확정 문구로 쓰지 않는다. AI 결과가 포함되면 생성·진행·실패·취소·검토 및 적용 상태를 구분하고, 검토 전 자동 덮어쓰기를 피한다. 문구와 접근성 명칭은 실제 기능을 설명해야 한다.
-
-보조 설명과 tooltip은 플랫폼이 지원하는 경우에 추가한다. 필수 행동과 정보는 hover 없이도 찾을 수 있어야 한다. icon-only control의 이름·역할·상태는 접근성 API에 제공한다.
+Define applicable empty/loading/error/long-content/success/undo content, actions and appearance. Use determinate progress only when known. Errors explain location/cause scope/recovery and preserve input. Do not communicate meaning only through color or brief animation.
+Buttons name actions; destructive confirmation names the object and consequence. Don't present guesses as facts. For AI, distinguish generation/progress/failure/cancel/review/apply and preserve originals until reviewed. Copy and accessible names describe the real behavior.
+Add supported tooltips/help without making them the only route to necessary information. Icon controls expose names, roles and state through native accessibility APIs.
 
 ## 5. Accessibility and proof
 
-선택 플랫폼의 `native-design`, `test`와 `build-and-verify`를 조회해 현재 기술에서 확인한다. 글자 배율, contrast·theme, screen reader의 이름·순서·상태, 포커스와 지원 입력 방식으로 흐름을 검증한다. 고정된 Mac 글자 크기를 모바일에 적용하지 않는다. 실제로 조작하지 못한 접근성 검사는 미확인으로 남긴다.
+Resolve native-design, test and build-and-verify for the current stack. Verify text scaling, contrast/theme, screen-reader naming/order/state, focus and supported inputs. Don't apply fixed Mac font sizes to mobile. Unperformed accessibility interactions remain unverified.
 
 ## 6. UX block
 
 ```markdown
 UX:
-- Flow: 진입점 → 입력·선택 → 완료 피드백 → 취소·복귀
-- Surface: 선택한 플랫폼별 화면 형태와 이유
-- States: 필요한 empty/loading/error/long/success 상태와 동작
-- Words: 공통 용어, 행동 문구와 플랫폼 표현 차이
-- Access: 입력·포커스·screen reader·글자 배율 기준
-- Proof: 확인할 화면·상태·상호작용과 실행 환경
+- Flow: entry → input/selection → completion feedback → cancel/return
+- Surface: platform-specific presentation and rationale
+- States: applicable empty/loading/error/long/success states and behavior
+- Words: shared terms, action copy and native wording differences
+- Access: input/focus/screen-reader/text-scaling requirements
+- Proof: screens/states/interactions and runtime environment
 ```
 
-조율자가 story나 기존 디자인 문서 한 곳에 통합한다. 플랫폼 담당자는 자신의 차이와 검증 결과만 반환한다. 검토 요청이면 관찰·제안으로 끝내고 구현을 시작하지 않는다.
-
-완료 기준: 대상 행동의 이름·surface·복귀·상태·문구·접근성 기준이 정해지고, 구현 결과의 실제 확인 여부와 남은 검사가 구분되어 있다.
+The coordinator integrates into an existing story/design document. Platform owners return differences and evidence. Review requests end with findings/proposals, not implementation.
+Done when action names, surfaces, return behavior, states, copy and accessibility criteria are decided, with actual verification and remaining checks distinguished.

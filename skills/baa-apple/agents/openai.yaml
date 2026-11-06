@@ -1,4 +1,4 @@
 interface:
   display_name: "BAA Apple"
-  short_description: "macOS·iOS·iPadOS 앱 작업을 해당 플랫폼 전문 절차로 진행합니다"
-  default_prompt: "$baa-apple로 Apple 범위에서 대상과 작업 단계를 판단해 진행해 주세요."
+  short_description: "Route Apple app work to the appropriate BAA platform procedures."
+  default_prompt: "Use $baa-apple for the assigned stage. Preserve the platform context and scope, and respond in the user's language."

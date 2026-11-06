@@ -1,69 +1,56 @@
 ---
 name: baa-improve-loop
-description: 정해진 작업 목록을 기능 단위로 구현·빌드·테스트·화면 비교하며 진행합니다. BAA에서 milestone 완료나 남은 기능의 지속 작업을 요청할 때 사용합니다.
+description: Implement an agreed backlog in functional increments with builds, tests and screen comparisons, for milestone completion or continuing in-scope work.
 ---
 
 # Improve loop
 
-[공통 실행 규칙](../../EXECUTION.md)을 먼저 읽는다. BAA가 전달한 선택 플랫폼, 작업 목적, 현재 단계, 파일 소유권과 완료 기준을 유지한다. 플랫폼을 다시 선택하거나 전체 기획을 반복하지 않는다.
+Read the [shared execution rules](../../EXECUTION.md). Inherit BAA's selected platform, purpose, current stage, file ownership and acceptance; do not repeat target selection or restart planning. Respond in the user's language and follow project documentation/localization conventions.
 
-후속 스킬은 실행 패키지 루트에서 `python3 scripts/resolve.py --entrypoint <호출 진입점> --platform <선택 플랫폼> --step <단계>`로 조회한다. 반환된 이름과 문서 경로를 사용하며 원본 BAMA·BAWA의 짧은 이름이나 외부 설치 경로를 추정하지 않는다. 반환된 path의 PROCEDURE.md를 읽어 수행한다. 내부 이름을 Skill 도구나 슬래시 명령으로 호출하지 않는다.
+Resolve follow-up roles with `python3 scripts/resolve.py --entrypoint <entrypoint> --platform <target> --step <role>` from the runtime root. Use the returned name/path, not upstream short names or external installations. Read the returned PROCEDURE.md, not a Skill-tool/slash command. Read relevant returned references when present.
 
-공유 문서의 최종 편집자는 BAA 조율자 한 명이다. 플랫폼 담당자는 공유 BRIEF/STORIES/GLOSSARY/연구·검토 문서를 동시에 수정하지 않고 변경 제안과 근거를 조율자에게 반환한다. 단독 실행에서는 현재 담당자가 그 역할을 맡는다.
+The coordinator is the sole editor of shared BRIEF/STORIES/GLOSSARY/research/review documents. Platform owners return proposals and evidence, not concurrent edits. In solo execution, the current worker holds that role.
 
-BAMA·BAWA의 공통 반복 흐름을 유지한다.
+Preserve the shared BAMA/BAWA iteration:
 
 ```text
-pick → plan → code → build/test/snapshot → compare → fix → commit(권한에 따름) → STORY 반영 → repeat
+pick → plan → code → build/test/snapshot → compare → fix → commit(if authorized) → update STORY → repeat
 ```
 
-사용자가 지정한 milestone·기능 범위에서 멈춘다. 지정 범위가 없으면 현재 합의된 milestone을 사용하고 전체 제품으로 확장하지 않는다. 신규 앱 생성이나 배포를 이 반복에 암묵적으로 추가하지 않는다.
+Stop at the requested milestone/features. If unspecified, use the agreed current milestone, not the whole product. Do not implicitly add scaffolding or distribution.
 
 ## 1. Pick and claim
 
-존재하는 STORIES 또는 작업 목록에서 이번 범위에 속하고 선행 조건이 충족된 다음 항목을 선택한다. 조율자가 해당 항목의 플랫폼별 담당 파일과 공통 데이터·동작 계약을 정해 배정한다. 원본 todo → doing → done 상태는 조율자 한 명이 기록한다. 플랫폼 담당자는 같은 story의 공유 상태 파일을 고치지 않고 자신의 진행·완료 제안을 반환한다.
-
-선택 플랫폼과 현재 단계, 소스 상태, 실제 프로젝트 기술, 소유 파일, 입력·출력 계약과 완료 기준을 이어받는다. iOS/iPadOS/macOS 공유 코드처럼 파일이 겹치면 조율자가 한 명에게 맡기거나 선행 변경을 먼저 완료한다.
+Choose the next in-scope item with satisfied prerequisites from existing STORIES/tasks. The coordinator assigns per-platform files and shared data/behavior contracts, and alone records todo → doing → done. Platform owners return progress/status proposals rather than editing the shared story file.
+Inherit target/current stage, source state, actual stack, owned files, I/O contracts and acceptance. Assign overlapping Apple sources to one owner or complete predecessor changes first.
 
 ## 2. Plan
 
-UI·행동·문구를 추가하는 story에 UX 기준이 부족하면 `ux-design`을 조회한다. 변경할 호출부·모델·테스트·리소스, 필요한 화면 상태와 검증 환경을 짧게 정한다. 데이터 필드·스키마 변경은 기존 데이터를 읽을 수 있는 기본값·migration 등 현재 저장 기술의 호환성 경로를 검토한다. 데이터 초기화로 문제를 우회하지 않는다.
+Resolve ux-design if UI/action/copy acceptance is incomplete. Briefly identify affected callers/models/tests/resources, screen states and environment. Review defaults/migrations and the current storage's compatibility path for schema/field changes. Never reset data to bypass the problem.
 
 ## 3. Code
 
-선택 플랫폼의 `code`와 `native-design`을 조회해 UX 블록, 기존 디자인 정의와 소유 범위 안에서 구현한다. OS 기능이 필요할 때만 `os-integrations`를 추가로 조회한다. 코드·문서 이름을 임의 추정하지 않고 resolver 결과를 사용한다. 다른 플랫폼의 언어·컨트롤·상태 기술로 바꾸지 않는다.
-
-새 화면은 프로젝트에 실제로 존재하는 화면 탐색·테스트·snapshot 대상 목록에 연결한다. 특정 SidebarItem/SidebarPage enum이나 시드 환경 변수가 있다고 가정하지 않는다. 다른 작업자의 변경과 검증·오류 처리를 보존한다.
+Resolve target code/native-design and implement within the UX block, existing design definitions and ownership. Add os-integrations only when needed. Use resolver-returned names/paths, not guesses. Don't replace language/control/state technology with another platform's approach.
+Connect new screens to the project's actual navigation/test/snapshot lists; don't assume SidebarItem/SidebarPage enums or seed environment variables exist. Preserve others' edits, validation and error handling.
 
 ## 4. Build, test and snapshot
 
-해당 플랫폼의 `build-and-verify`와 `test`를 조회한다. 비자명한 새 로직과 버그 수정은 관련 검증을 추가·수정하고 버그를 재현하는 조건에서 확인한다. 기존 테스트·self-test·UI 자동화·seed data가 있으면 재사용하고, 사용자가 실제로 만들 수 있는 데이터로 변경 화면을 확인한다.
-
-수정한 페이지와 인접 흐름을 먼저 검증한다. milestone 끝에는 변경 영향과 프로젝트 필수 검사에 맞춰 넓힌다. 실제로 지원하는 라이트·다크, 크기·배율·입력 방식과 접근성 상태를 확인한다. 검증용 데이터는 사용자 저장소와 분리하고 release를 덮어쓰지 않는다. 공유 기기·출력·dev 설치 경로가 충돌하면 그 작업만 순차 실행한다.
+Resolve build-and-verify/test. Add or update appropriate checks for nontrivial logic/bug fixes and verify reproducing conditions. Reuse existing tests/self-tests/UI automation/seed data and user-creatable states.
+Verify modified screens and adjacent flows first; expand at milestone end for impact/required checks. Cover supported light/dark, size/scale/input and accessibility states. Isolate test data from user storage and preserve Release. Serialize only shared device/output/designated dev-install conflicts.
 
 ## 5. Compare and fix
 
-실제 실행 화면·상호작용과 reference/acceptance를 다음 순서로 비교한다.
-
-1. 누락된 동작, 잘못된 데이터와 복구·보존 조건.
-2. UX에 정한 이름, 흐름, 상태와 피드백.
-3. 구조·순서·누락 요소와 플랫폼 레이아웃 검사 실패.
-4. 정보 위계, 간격·정렬, 글자·색상과 세부 표현.
-
-참고 화면이 없으면 acceptance와 선택 플랫폼의 native-design 기준을 사용한다. 픽셀 복제 요청이 아니라면 해당 플랫폼의 시스템 부품과 조작을 우선한다. reference와 비교할 때는 데이터·화면 크기·배율·상태를 맞춘다.
-
-실패는 기능 결함, 테스트 기대값, 자동화·권한·기기 환경 문제로 구분한다. 로그·화면·소스 상태에서 원인 가설을 정하고 최소 수정 후 영향 검사를 다시 한다. 새 증거·수정·환경 변화 없이 같은 명령을 반복하지 않는다. 필수 실행 환경·권한이 없어 진행할 수 없으면 해당 플랫폼을 대기로 두고 사유·시도·재개 조건을 반환하며 독립 항목은 계속한다. 통과하지 않은 항목을 done으로 만들지 않는다.
+Compare actual runtime screens/interactions with references/acceptance in this order: missing behavior/wrong data/recovery/preservation; agreed UX naming/flow/state/feedback; structure/order/missing elements/layout failures; then hierarchy/spacing/alignment/type/color/details.
+Without a reference use acceptance/native-design. Unless exact pixel reproduction was requested, prefer native controls/input. Match data/viewport/scale/state when comparing captures.
+Distinguish product defects, test expectations and automation/permission/device failures. Form a hypothesis from logs/screens/source, make the smallest fix and rerun affected checks. Do not repeat identical commands without new evidence/change/environment. If required runtime/permissions are unavailable, leave that platform pending with attempts/reason/resumption conditions; continue independent items. Never mark an unpassed item done.
 
 ## 6. Commit and record
 
-커밋 권한이 있으면 기능 단위로 관련 코드·테스트와 조율자가 통합한 story 상태를 기록한다. 타인의 변경이나 관계없는 사용자 파일을 일괄 stage하지 않는다. 권한이 없으면 검증된 diff와 상태 제안을 인계하고 커밋하지 않는다. 각 플랫폼 담당자가 같은 공유 STORY·FIXLOG·GLOSSARY를 동시에 편집하거나 다른 담당자의 미완료 변경을 포함해 커밋하지 않는다.
-
-조율자는 플랫폼별 결과와 현재 통합 소스에 대한 검사 증거를 확인해 상태를 반영한다. 공유 코드가 검증 후 바뀌었다면 영향받는 검사의 유효성을 확인한다. 버그 수정은 필요한 FIXLOG에 증상·원인·수정·Rule을 한 번 기록한다.
+When authorized, commit relevant functional code/tests and coordinator-integrated status. Do not bulk-stage unrelated/user/other-worker files. Without commit permission, hand off the verified diff and status proposals. Owners must not concurrently edit shared STORY/FIXLOG/GLOSSARY or commit another owner's incomplete work.
+The coordinator verifies per-platform results and evidence for integrated sources before status updates. Re-evaluate evidence if shared code changed after checks. Record necessary FIXLOG symptom/cause/fix/Rule once.
 
 ## 7. Report and milestone check-in
 
-완료한 행동, 플랫폼별 소스·타깃·기기와 검사 결과, 화면·로그 경로, 대기 항목과 재개 조건, 사용자가 직접 확인해야 할 조작, 다음 항목을 반환한다. 실행 요청이 포함돼 있으면 해당 플랫폼의 dev 설치본을 사용할 수 있게 한다. 보고를 위해 release나 추가 설치본을 만들지 않는다.
-
-milestone을 마치면 `improve-architecture`로 현재 구조의 변경 근거를 확인한다. 다음 milestone을 자동으로 시작하지 않고 사용자가 지정한 범위에서 종료한다. 자율 진행 요청은 임의 범위 확대·배포·데이터 삭제 권한이 아니다.
-
-완료 기준: 지정 범위의 각 플랫폼 결과가 검증 완료 또는 사유가 있는 환경 대기로 구분되고, 공유 계약과 통합 소스의 필수 검사가 확인되며, 실행 증거와 남은 항목이 조율자에게 인계되어 있다. 필수 검증이 남았다면 전체 완료라고 보고하지 않는다.
+Return completed behavior; per-platform source/target/device/checks; screen/log paths; pending items/resumption; manual user acceptance; and the next item. If running the app was requested, make the designated dev app usable. Don't create Release or extra installs merely for reporting.
+At milestone completion use improve-architecture to review current structure. Do not start the next milestone automatically or treat autonomous work as authorization for scope expansion, publication or data deletion.
+Done when each in-scope platform is verified or explicitly waiting on an environment, shared contracts/integrated-source required checks are confirmed, and evidence/remaining work are handed off. Required pending checks preclude overall completion claims.

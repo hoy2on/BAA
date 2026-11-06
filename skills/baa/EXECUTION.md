@@ -1,80 +1,53 @@
-# BAA 공통 실행 규칙
+# BAA shared execution rules
 
-BAA 하나에 포함된 BAMA macOS 스킬, BAWA Windows 스킬, 공통 스킬과 모바일 전문 스킬을 사용한다.
-다른 플러그인의 동명 스킬이나 사용자 홈의 별도 BAMA/BAWA 설치를 참조하지 않는다.
-원본 본문의 고정 경로·개인 앱·새 프로젝트 전제보다 사용자 요청, 프로젝트 지침과 이 규칙을 우선한다.
+Use BAA's packaged BAMA macOS, BAWA Windows, common and mobile procedures. Do not resolve same-named procedures from external BAMA/BAWA installations. User requests, project instructions and these rules take precedence over upstream fixed paths, personal-app assumptions and new-project examples.
 
-## 스킬 연결
+## Language
 
-호출 진입점, 허용 플랫폼, 선택 플랫폼과 판정 근거, 요청 목적, 현재 단계, 프로젝트 경로·기술·지원 OS, story/화면,
-소유 파일과 공유 계약, 완료 기준, 실행 환경을 후속 스킬에 전달한다. 플랫폼을 다시 묻지 않는다.
-실행 패키지 루트는 현재 문서가 있는 디렉터리다. 경로를 특정 사용자나 설치 캐시 이름으로 고정하지 않는다.
-`python3 <실행 패키지 루트>/scripts/resolve.py --entrypoint <호출 진입점> --platform <선택 대상> --step build-and-verify`처럼
-정확한 플랫폼과 역할을 조회한다. 결과의 `path`에 있는 PROCEDURE.md를 읽고 그 절차를 실행한다.
-공개 진입점은 baa, baa-apple, baa-android, baa-windows 네 개다. 직접 호출은 routing.json의 entrypoints 범위를 유지하며 내부 절차는 Skill 도구나 슬래시 명령으로 호출하지 않는다.
-기존 본문에서 고유 이름을 연결하면 `python3 <실행 패키지 루트>/scripts/resolve.py --entrypoint <호출 진입점> --name <고유 이름>`으로
-파일을 찾고 읽는다. 단계를 짐작해서 다른 플랫폼 절차로 대체하지 않는다.
-직접 호출의 진입점은 하위 절차에서도 유지하고 resolver 오류를 피하려 baa로 바꾸지 않는다. --name 조회도 허용 범위 안 내부 문서만 반환한다.
-Python 실행 이름은 현재 호스트에서 확인한다. Python이 없으면 routing.json의 entrypoints 허용 범위를 먼저 검사하고 해당 플랫폼/역할 항목을 직접 읽어 동일한 내부 문서를 선택한다. 런타임을 자동 설치하거나 다른 플랫폼 스킬로 대체하지 않는다.
-스킬 본문의 고유 이름은 같은 BAA 플러그인에 포함된 내부 문서 식별자다. 상대 경로의 도구·템플릿은 호출한 스킬 폴더 기준이다.
-내부 문서를 읽어도 호스트의 CLAUDE_SKILL_DIR는 공개 진입점 위치를 가리킬 수 있다.
-내부 명령을 실행할 때마다 resolver가 반환한 PROCEDURE.md의 부모 디렉터리를 BAA_SKILL_DIR로 설정하고
-그 문서에 있는 상대 도구·템플릿 경로를 사용한다. 공개 진입점의 스킬 디렉터리를 재사용하지 않는다.
+Internal instructions use English. Respond in the user's language unless the user requests another language. Follow project conventions for documents, source comments and localization. Preserve existing app strings and translations; translating internal instructions does not authorize translating product UI or user data. Keep code identifiers, paths, CLI flags and error originals intact where they matter. Provide English and Korean usage guides through README.md and README.ko.md.
 
-공통 슬롯은 research, app-brief, user-stories, ux-design, improve-architecture, improve-loop이다.
-플랫폼 슬롯은 router, clone, scaffold, code, native-design, design-system, design-kit,
-design-from-app, layout-grid, app-icon, os-integrations, performance, build-and-verify,
-test, agent-cli, distribute다. 존재하지 않는 조합은 resolver가 오류로 반환한다.
-macOS에는 원본에 없는 distribute를 가짜로 연결하지 않는다. 해당 작업은 프로젝트의 실제 릴리즈 절차를 조사하고
-범위를 명시한 뒤 수행한다. 이 경우에도 빌드·패키지 생성과 실제 배포·설치는 구분한다.
+## Procedure connections
 
-## 작업 범위
+Pass entrypoint, allowed platforms, selected target/evidence, purpose/current stage, project path/stack/supported OS, story/screen, owned files/shared contracts, acceptance and environment to follow-up procedures. Do not re-ask the target.
+The runtime root is the directory containing this document. Never hard-code a user's home or cache name. Resolve the exact role, for example:
+`python3 <runtime-root>/scripts/resolve.py --entrypoint <entrypoint> --platform <target> --step build-and-verify`.
+Read the returned `path`'s PROCEDURE.md. Public entrypoints are baa, baa-apple, baa-android and baa-windows. Preserve routing.json entrypoint restrictions. Internal procedures are documents, not Skill-tool/slash commands.
+For a packaged unique name, use `python3 <runtime-root>/scripts/resolve.py --entrypoint <entrypoint> --name <unique-name>`. Never substitute another platform's procedure by guessing. Preserve the direct entrypoint downstream; do not change it to baa to bypass an error. Name lookups are scoped too.
+Check the host's actual Python executable. If Python is absent, inspect routing.json entrypoint permissions and select the same platform/role document directly. Do not install a runtime automatically or substitute another platform.
+Unique names identify packaged internal documents. Resolve relative tools/templates from that procedure's folder. The host CLAUDE_SKILL_DIR may still identify the public entrypoint: before each internal command set BAA_SKILL_DIR to the parent of the resolver-returned PROCEDURE.md, not the public skill directory.
 
-기존 프로젝트의 기술, 컴포넌트, 데이터·API 호환성을 유지한다. 원본이 SwiftUI/WinUI 템플릿을
-설명한다고 UIKit/WPF/Views/크로스플랫폼 앱을 전환하지 않는다. 새 앱에서만 맞는 템플릿을 선택한다.
-계정·동기화·결제·공유 등 사용자가 요청한 기능을 개인 앱이라는 전제로 제거하지 않는다.
-디자인만 수정하면 디자인 분기부터 진행하고 전체 기획서나 새 앱을 만들지 않는다.
-조사·검토만 요청하면 관찰과 제안을 반환하고 구현·설치·커밋을 시작하지 않는다.
+Folders categorize tasks: start (router/scaffold), plan (clone), code (implementation/OS integration/performance/agent CLI), design (native UI/tokens/assets), ship (build/test/distribution). They are not a required sequence.
+iOS/iPadOS each have start/plan/code/design/ship specialists and specs. The role path points to its OS procedure, with apple/shared base procedures in references. Preserve device-specific requirements; shared guidance is not permission to add other platforms and does not route through macOS. Keep desktop tools/templates and platform-independent common procedures in their existing locations.
+Common roles: research, app-brief, user-stories, ux-design, improve-architecture, improve-loop. Platform roles: router, clone, scaffold, code, native-design, design-system, design-kit, design-from-app, layout-grid, app-icon, os-integrations, performance, build-and-verify, test, agent-cli, distribute. Missing combinations return an error.
+For macOS distribute, inspect the real channel/workflow. Distinguish direct distribution from App Store workflows and authorize build/package creation, notarization, upload, store submission and installation as separate stages.
 
-원본 스킬의 기본 OS/SDK 버전은 제공 템플릿의 기준이다. 기존 앱의 최소 OS나 의존성을 임의로 올리지 않는다.
-필요한 API는 실제 설치 버전과 현재 공식 문서에서 확인한다. 새 패키지는 기존 기능을 확인한 뒤 필요할 때만 쓴다.
+## Scope
 
-## 병렬 작업
+Preserve the project's technology, components, data and API compatibility. A SwiftUI/WinUI starter does not authorize converting UIKit/WPF/Views/cross-platform code. Choose a suitable starter only for a new app.
+Do not remove requested accounts, sync, payment or sharing because an upstream example assumes a personal app. Design-only work starts in the design branch, not a new brief/scaffold. Review-only work returns observations/proposals without edits, installation or commits.
+Upstream OS/SDK defaults describe starter baselines, not permission to raise existing deployment targets or dependencies. Confirm required APIs with installed versions/current official documentation; inspect existing capabilities before adding a package.
 
-BAA 조율자가 공통 요구사항과 파일 소유권을 정하고 선택 대상별 router 문서와 단계별 경로를 플랫폼 담당자에게 배정한다. 직접 호출 범위·판정 근거·현재 단계를 전달하며 담당자는 플랫폼 선택을 반복하지 않는다.
-동시에 작업하는 다른 담당자가 있으며 타인의 변경을 되돌리면 안 된다고 인계에 명시한다.
-공유 모델·API·번역·프로젝트 구성·lockfile·작업 문서는 담당자를 한 명으로 정한다.
-플랫폼 담당자는 공유 문서를 직접 갱신하는 대신 변경 제안을 조율자에게 반환한다.
-iOS/iPadOS/macOS는 소스가 겹칠 수 있다. 플랫폼 이름만으로 파일이 독립적이라고 판단하지 않는다.
-겹치는 범위는 한 담당자가 맡거나 선행 변경을 통합한 뒤 후속 작업한다. 독립 영역만 병렬 실행한다.
-하위 플랫폼 담당자는 별도 팀을 재귀 생성하지 않는다. 원본 research/suite의 팀 생성도 조율자 배정과 중복하지 않는다.
-에이전트 슬롯 한도에 맞춰 작업을 대기열로 실행하고, 도구가 없으면 순차 실행임을 알린다.
+## UI design evidence and review
 
-같은 빌드 출력·시뮬레이터·기기·고정 dev 설치본을 동시에 바꾸지 않는다. 충돌하는 검증만 직렬화한다.
-병렬 실행을 위해 설치용 앱 복사본을 늘리지 않는다. worktree는 필요할 때 현재 작업 브랜치 HEAD에서 만들고,
-원본 BAWA suite의 main 병합 지시를 사용자 권한으로 해석하지 않는다.
+For UI changes apply [design intelligence](common/baa-ux-design/design-intelligence.md), then [UI review](common/baa-ux-design/ui-review.md) for the target and changed scope. Use installed ui-ux-pro-max local searches where relevant; SDK/platform requirements prevail over generic results. Without that skill use packaged guidance. Do not force searches for backend or nonvisual scripts.
+The coordinator alone edits shared visual decisions, canonical design documents, MASTER and page overrides. Platform owners inherit verified decisions and propose deltas rather than regenerating the same system concurrently. Do not copy the search database/scripts into BAA or add public commands.
 
-## 설치와 사용자 데이터
+## Parallel work
 
-설치 전 제품명·식별자·서명·빌드 변형과 종료·삭제 대상을 확인한다. release와 개발 앱은 공존해야 한다.
-macOS는 `/Applications/[실제 제품명]-dev.app` 하나와 release와 다른 식별자를 사용한다.
-iOS/iPadOS/Android/Windows도 기존 dev 변형 하나를 사용한다. 별도 dev가 없으면 먼저 구분한다.
-현재 호스트와 대상 플랫폼은 다르다. Mac에서 Windows 코드를 작업해도 Windows 실행 환경이 생기는 것은 아니다.
-release 앱, 사용자 문서·기록·녹음·설정·키체인·공유 저장소는 삭제하거나 자동 이관하지 않는다.
-원본 스크립트도 실행 전에 이 규칙에 맞는지 확인한다. 프로젝트에서 실제 사용 중인 스크립트가 있으면 우선한다.
-CLI/MCP/딥링크·IPC 이름도 dev와 release의 데이터 경계가 섞이지 않게 확인한다.
+The coordinator decides shared requirements and file ownership, then hands each selected target's router/role paths to its owner. Preserve entrypoint restrictions, evidence and current stage; owners do not repeat platform selection. Explicitly tell owners others are working and they must not revert their changes.
+Assign one owner for shared models/APIs/translations/project files/lockfiles/task documents. Platform owners propose shared-document updates to the coordinator.
+Apple platform names alone do not imply independent files. Group overlapping sources under one owner or integrate predecessor work before follow-up. Parallelize only independent work. Platform owners must not create nested teams; upstream research/suite team creation must not duplicate coordinator assignments. Queue within slot limits and state when tools require sequential execution.
+Do not concurrently mutate the same build output, simulator, device or designated dev install; serialize only conflicting checks. Do not create extra installed app copies for parallelism. Create a needed worktree from the current branch HEAD; upstream BAWA suite instructions to merge main do not grant user authorization.
 
-## 검증·인계·커밋
+## Installation and user data
 
-실제 프로젝트의 빌드·테스트·UI 조작 절차를 확인한다. 원본 전용 APP_SEED, SidebarItem,
-자동 캡처 도구가 있다고 가정하지 않는다. 실행 가능한 대표 흐름부터 확인하고 필요한 범위로 확장한다.
-UI 변경은 실제 실행 화면과 상호작용을 확인한다. 빌드 성공과 런타임 성공을 구분하고
-시뮬레이터·에뮬레이터·실기기·원격 환경을 명시한다. 환경이 없으면 미검증/대기로 남긴다.
-원격 기기나 CI는 실제 사용 가능하고 권한이 확인된 경우에만 쓴다.
+Before installing, verify actual product name, ID, signing, build variant and every termination/deletion target. Release and development apps must coexist.
+macOS uses one `/Applications/[actual-product-name]-dev.app` and an ID distinct from Release. iOS/iPadOS/Android/Windows also use one existing designated dev variant; establish separation first if absent.
+Host and target differ: editing Windows sources on Mac does not supply a Windows runtime. Do not delete or automatically migrate Release apps, user documents/history/recordings/settings/keychain/shared storage. Inspect upstream scripts against these rules before running; prefer the project's existing workflow. Keep CLI/MCP/deep-link/IPC channels from mixing dev and release data.
 
-결과에는 변경 파일, 충족 기준, 소스 상태·타깃·환경, 검사 명령과 결과, 화면·로그 경로,
-공유 변경 제안, 막힌 항목과 재개 조건을 담는다. 공통 소스 통합 후 영향받는 검사의 유효성을 확인한다.
-새 근거나 수정 없이 실패를 반복하지 않는다. 빌드/탐지/권한 문제를 제품 결함과 구분한다.
+## Verification, handoff and commits
 
-원본의 자동 커밋·git add -A·배포 지시는 권한 확대가 아니다. 현재 요청과 해당 작업 스킬에 따라
-담당 파일만 커밋하며 Co-Authored-By를 넣지 않는다. 서명·릴리즈 패키지 생성은 외부 게시와 구분한다.
+Inspect the real build/test/UI workflow. Do not assume upstream-only APP_SEED, SidebarItem or capture tools exist. Verify a representative executable flow first, then expand as needed.
+UI changes require actual runtime screens/interactions. Separate build success from runtime success and name simulator/emulator/hardware/remote environments. Report unavailable checks as unverified/pending. Use remote devices or CI only when actually available and authorized.
+Return changed files, acceptance, source state/target/environment, commands/results, screen/log paths, shared proposals, blockers and resumption conditions. Recheck evidence validity after shared-source integration. Do not repeat failures without a new hypothesis/change; separate product defects from build/detection/permission issues.
+Upstream automatic commits, git add -A and distribution steps do not expand permissions. Commit only owned relevant files under current user authorization and the project's commit workflow, without Co-Authored-By. Signing/package creation is separate from external publication.

@@ -1,5 +1,5 @@
 interface:
   display_name: "BAA macos layout-grid"
-  short_description: "BAA macos 플랫폼의 layout-grid 작업 절차"
+  short_description: "BAA macos layout-grid procedure for the assigned platform and task."
 policy:
   allow_implicit_invocation: false

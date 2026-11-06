@@ -65,6 +65,7 @@ view, and the real icon in every snapshot.
 | Build it and look at every page | `baa-macos-build-and-verify` |
 | Tests, a self-test, or an agent that drives the running app | `baa-macos-test-mac-app` |
 | Work through the backlog on its own | `baa-improve-loop` |
+| Package, sign, notarize, or submit a release | `baa-macos-distribute` |
 
 ## Done when
 

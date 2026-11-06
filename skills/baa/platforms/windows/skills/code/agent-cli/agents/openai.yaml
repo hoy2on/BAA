@@ -1,5 +1,5 @@
 interface:
   display_name: "BAA windows agent-cli"
-  short_description: "BAA windows 플랫폼의 agent-cli 작업 절차"
+  short_description: "BAA windows agent-cli procedure for the assigned platform and task."
 policy:
   allow_implicit_invocation: false

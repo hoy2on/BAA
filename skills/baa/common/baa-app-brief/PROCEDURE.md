@@ -1,65 +1,55 @@
 ---
 name: baa-app-brief
-description: 새 앱의 목적·최소 기능·데이터·대상 플랫폼을 한 페이지 개요로 정리합니다. 아이디어나 조사 결과를 구현 범위로 바꿀 때 사용합니다.
+description: Define app purpose, minimum jobs, data and target platforms in a one-page brief when turning ideas/research into implementation scope.
 ---
 
 # App brief
 
-[공통 실행 규칙](../../EXECUTION.md)을 먼저 읽는다. BAA가 전달한 선택 플랫폼, 작업 목적, 현재 단계, 파일 소유권과 완료 기준을 유지한다. 플랫폼을 다시 선택하거나 전체 기획을 반복하지 않는다.
+Read the [shared execution rules](../../EXECUTION.md). Inherit BAA's selected platform, purpose, current stage, file ownership and acceptance; do not repeat target selection or restart planning. Respond in the user's language and follow project documentation/localization conventions.
 
-후속 스킬은 실행 패키지 루트에서 `python3 scripts/resolve.py --entrypoint <호출 진입점> --platform <선택 플랫폼> --step <단계>`로 조회한다. 반환된 이름과 문서 경로를 사용하며 원본 BAMA·BAWA의 짧은 이름이나 외부 설치 경로를 추정하지 않는다. 반환된 path의 PROCEDURE.md를 읽어 수행한다. 내부 이름을 Skill 도구나 슬래시 명령으로 호출하지 않는다.
+Resolve follow-up roles with `python3 scripts/resolve.py --entrypoint <entrypoint> --platform <target> --step <role>` from the runtime root. Use the returned name/path, not upstream short names or external installations. Read the returned PROCEDURE.md, not a Skill-tool/slash command. Read relevant returned references when present.
 
-공유 문서의 최종 편집자는 BAA 조율자 한 명이다. 플랫폼 담당자는 공유 BRIEF/STORIES/GLOSSARY/연구·검토 문서를 동시에 수정하지 않고 변경 제안과 근거를 조율자에게 반환한다. 단독 실행에서는 현재 담당자가 그 역할을 맡는다.
+The coordinator is the sole editor of shared BRIEF/STORIES/GLOSSARY/research/review documents. Platform owners return proposals and evidence, not concurrent edits. In solo execution, the current worker holds that role.
 
-BAMA와 BAWA의 한 페이지 BRIEF → user-stories / 초기 생성 연결을 유지한다. 기존 앱의 국소 디자인 수정에는 새 BRIEF를 강제하지 않는다.
+Preserve BAMA/BAWA's one-page BRIEF → user-stories/scaffold connection. Local existing-screen design work does not require a new BRIEF.
 
 ## 1. Name and read
 
-기존 프로젝트 경로, 제품명과 지원 플랫폼을 먼저 확인한다. 신규 프로젝트는 사용자가 지정한 이름·위치를 사용하고, 빠진 이름·위치는 현재 맥락에서 확인하거나 필요한 항목만 묻는다. 임의 폴더를 만들어 확정된 것처럼 진행하지 않는다.
-
-기존 `docs/BRIEF.md`, `docs/research/`, `docs/screens/INDEX.md`와 전달받은 spec을 읽고 답이 있는 질문을 반복하지 않는다. spec에 Brief와 Stories가 있으면 의미와 범위를 보존해 기존 문서에 통합하고 상세 동작·주의사항은 `docs/SPEC.md`로 연결한다. 원문 파일을 덮어쓰지 않는다.
+Confirm existing project path, product name and supported platforms. For a new project use the user's name/location; resolve missing consequential details from context or ask only what is needed. Do not silently create a folder and treat it as agreed.
+Read existing docs/BRIEF.md, docs/research/, docs/screens/INDEX.md and supplied specs. Integrate spec Brief/Stories into existing docs without changing their meaning/scope; link detailed behavior/gotchas through docs/SPEC.md. Preserve originals and do not repeat answered questions.
 
 ## 2. Resolve the scope
 
-사용자가 이미 정한 선택은 유지한다. 불명확하며 결과에 영향을 주는 사항만 확인한다. 사용자가 자율 결정을 요청하면 근거와 선택을 기록하고 진행한다.
-
-- 누구의 어떤 작업을 돕고 어떤 앱·습관을 대체하는가.
-- 자주 수행할 주요 행동과 그 행동에서 사용하는 데이터.
-- 선택 플랫폼, 지원 기기·OS와 기존 기술; 신규 프로젝트의 기술은 현재 도구·공식 지원을 확인해 정한다.
-- 각 플랫폼의 주 화면, 탐색과 진입점, OS 연동과 권한.
-- 오프라인·서버·계정·동기화·결제 등 실제로 요구된 운영 조건.
-- 참고 앱과 시각적 의도, 공유할 용어·브랜드 규칙과 플랫폼별 표현 차이.
-- 이번 범위의 최소 완료 흐름과 명시적으로 미룰 항목.
-
-개인 앱을 가정해 사용자가 요청한 서버·계정·공유·온보딩 등을 자동으로 삭제하지 않는다. 새 기능은 사용 가능한 최소 흐름으로 줄이되 범위 변경의 영향을 알린다. 화면 수나 개발 시간을 근거 없이 약속하지 않는다.
+Preserve settled choices. Clarify only consequential unknowns; if autonomous decisions were requested, record your evidence and choices.
+Determine the user/job and replacement habit/app; common actions/data; selected platforms/devices/OS/actual technology; screen/navigation/entrypoints; OS hooks/permissions; offline/server/account/sync/payment/privacy needs; reference/look/shared vocabulary/brand/native differences; and the minimum completion flow and explicit exclusions.
+Do not remove requested services/accounts/sharing/onboarding under a personal-app assumption. Keep the smallest useful flow while explaining scope changes. Do not promise screen counts or development time without evidence.
 
 ## 3. Write BRIEF
 
-조율자는 기존 문서에 중복 없이 한 페이지 정도로 정리한다.
+The coordinator writes about one page without duplicating existing documentation.
 
 ```markdown
 # <AppName>
-한 문장 목적과 대상 사용자.
+One-sentence purpose and audience.
 ## Replaces
-대체하는 앱·습관 또는 기존 제품에서 개선할 부분.
+The app/habit replaced, or the existing product behavior improved.
 ## Main jobs
-주요 사용자 행동.
+Primary user actions.
 ## Data
-데이터와 보존·호환성 조건.
+Data and preservation/compatibility requirements.
 ## Platforms and shape
-선택 플랫폼, 실제 기술·지원 OS, 플랫폼별 주 화면과 탐색.
+Selected platforms, actual technology/supported OS, screens and navigation.
 ## System hooks
-필요한 OS 기능·권한과 플랫폼별 차이.
+OS capabilities, permissions and platform differences.
 ## Reference and look
-참고 앱, 공유할 시각적 의도와 플랫폼별 네이티브 표현.
+References, shared visual intent and native platform expression.
 ## Operating constraints
-오프라인·서비스·계정·동기화·개인정보 등 확인한 요구.
+Verified offline/service/account/sync/privacy requirements.
 ## Not in this scope
-합의한 제외 항목과 필요한 후속 검증.
+Agreed exclusions and remaining verification.
 ```
 
 ## 4. Hand off
 
-기능과 완료 기준을 정할 차례면 `user-stories`를 조회한다. 이미 충분한 요구사항이 있고 신규 앱의 실행 뼈대를 원하면 선택 플랫폼의 `scaffold`를 조회한다. 여러 플랫폼의 개요는 한 번 작성하고 생성·구현은 각 담당자에게 배정한다. 새 앱 생성 지시가 기존 앱 재생성 권한은 아니다.
-
-완료 기준: 목적, 데이터, 선택 플랫폼·화면 형태, 운영 제약과 이번 범위가 명확하고 후속 story 또는 scaffold에 전달할 수 있다.
+Resolve user-stories for features/acceptance. If requirements are sufficient and a new runnable skeleton is requested, resolve the target's scaffold. Write a multi-platform brief once, assigning implementation per platform. New-app instructions do not authorize regenerating an existing app.
+Done when purpose, data, targets/screen shape, operational limits and scope are clear enough for stories/scaffold.

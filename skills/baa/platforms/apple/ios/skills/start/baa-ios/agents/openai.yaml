@@ -1,0 +1,6 @@
+interface:
+  display_name: "BAA iOS owner"
+  short_description: "BAA iOS owner procedure for the assigned platform and task."
+  default_prompt: "Use $baa-ios for the assigned stage. Preserve the platform context and scope, and respond in the user's language."
+policy:
+  allow_implicit_invocation: false

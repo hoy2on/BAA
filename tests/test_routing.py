@@ -29,12 +29,92 @@ class RoutingTests(unittest.TestCase):
                 self.assertEqual(resolver.resolve(platform, 'code')['name'], expected[platform])
         for platform in self.catalog['platforms']:
             self.assertEqual(resolver.resolve(platform, 'user-stories')['name'], 'baa-user-stories')
-        self.assertEqual(resolver.resolve('ios', 'code')['path'], resolver.resolve('ipados', 'code')['path'])
+        self.assertNotEqual(resolver.resolve('ios', 'code')['path'], resolver.resolve('ipados', 'code')['path'])
+        self.assertEqual(resolver.resolve('ios', 'code')['references'], resolver.resolve('ipados', 'code')['references'])
         self.assertNotEqual(resolver.resolve('ios', 'native-design')['path'], resolver.resolve('ipados', 'native-design')['path'])
         self.assertNotEqual(resolver.resolve('macos', 'build-and-verify')['path'], resolver.resolve('windows', 'build-and-verify')['path'])
 
+    def test_every_platform_role_uses_the_matching_workflow_stage(self):
+        stages = {
+            'start': {'router', 'scaffold'},
+            'plan': {'clone'},
+            'code': {'code', 'os-integrations', 'performance', 'agent-cli'},
+            'design': {'native-design', 'design-system', 'layout-grid', 'design-kit',
+                       'design-from-app', 'app-icon'},
+            'ship': {'build-and-verify', 'test', 'distribute'},
+        }
+        for platform, roles in self.catalog['platforms'].items():
+            for stage, steps in stages.items():
+                for step in steps & roles.keys():
+                    with self.subTest(platform=platform, step=step):
+                        route = Path(resolver.resolve(platform, step)['path'])
+                        self.assertEqual(route.parent.parent.name, stage)
+                        self.assertEqual(route.parent.parent.parent.name, 'skills')
+
+    def test_mobile_apple_specialists_have_local_roles_and_shared_bases(self):
+        for platform in ('ios', 'ipados'):
+            pack = ROOT / 'platforms/apple' / platform
+            self.assertEqual({p.name for p in (pack / 'skills').iterdir() if p.is_dir()},
+                             {'start', 'plan', 'code', 'design', 'ship'})
+            self.assertTrue((pack / 'specs/README.md').is_file())
+            self.assertTrue(any(p.name != 'README.md' for p in (pack / 'specs').glob('*.md')))
+            for step in self.catalog['platforms'][platform]:
+                result = resolver.resolve(platform, step, entrypoint='baa-apple')
+                with self.subTest(platform=platform, step=step):
+                    path = Path(result['path'])
+                    self.assertTrue(path.is_relative_to(pack / 'skills'))
+                    if step not in ('router', 'native-design'):
+                        shared_procedures = [Path(item) for item in result['references'] if Path(item).name == 'PROCEDURE.md']
+                        self.assertEqual(len(shared_procedures), 1)
+                        shared = shared_procedures[0]
+                        self.assertTrue(shared.is_relative_to(ROOT / 'platforms/apple/shared/skills'))
+                        self.assertTrue(shared.is_file())
+                        self.assertEqual(shared.parent.parent.name, path.parent.parent.name)
+                        # Name dispatch must still find shared bases within Apple scope.
+                        name = re.search(r'^name: (.+)$', shared.read_text(), re.M).group(1)
+                        self.assertEqual(Path(resolver.resolve_name(name, entrypoint='baa-apple')['path']), shared)
+                        with self.assertRaises(ValueError):
+                            resolver.resolve_name(name, entrypoint='baa-android')
+                        other = 'ipados' if platform == 'ios' else 'ios'
+                        self.assertIn(str(shared), resolver.resolve(other, step)['references'])
+
+    def test_all_platforms_have_specs_shipping_and_task_specific_references(self):
+        for platform in self.catalog['platforms']:
+            with self.subTest(platform=platform):
+                ship = resolver.resolve(platform, 'distribute')
+                self.assertTrue(Path(ship['path']).is_file())
+                pack = ROOT / ('platforms/apple/' + platform if platform in ('macos', 'ios', 'ipados') else 'platforms/' + platform)
+                self.assertTrue((pack / 'specs/README.md').is_file())
+                self.assertGreater(len(list((pack / 'specs').glob('*.md'))), 1)
+                for step in ('ux-design', 'improve-architecture'):
+                    result = resolver.resolve(platform, step)
+                    self.assertTrue(result['references'], (platform, step))
+                    for reference in result['references']:
+                        self.assertTrue(Path(reference).is_file())
+
+    def test_design_intelligence_is_shared_scoped_and_portable_without_external_skill(self):
+        workflow = 'common/baa-ux-design/design-intelligence.md'
+        review = 'common/baa-ux-design/ui-review.md'
+        with tempfile.TemporaryDirectory(prefix='baa-design-') as folder:
+            relocated = (Path(folder) / 'baa').resolve()
+            shutil.copytree(ROOT, relocated, ignore=shutil.ignore_patterns('__pycache__'))
+            for entrypoint, platforms in self.catalog['entrypoints'].items():
+                for platform in platforms:
+                    for role in ('ux-design', 'native-design', 'design-system', 'design-kit',
+                                 'design-from-app', 'layout-grid', 'app-icon'):
+                        result = resolver.resolve(platform, role, relocated, entrypoint)
+                        self.assertIn(str((relocated / workflow).resolve()), result['references'])
+                        self.assertTrue(all(Path(p).is_file() and Path(p).is_relative_to(relocated)
+                                            for p in result['references']))
+                    for role in ('build-and-verify', 'test'):
+                        result = resolver.resolve(platform, role, relocated, entrypoint)
+                        self.assertIn(str((relocated / review).resolve()), result['references'])
+                    for role in ('code', 'os-integrations', 'distribute', 'research'):
+                        result = resolver.resolve(platform, role, relocated, entrypoint)
+                        self.assertNotIn(str((relocated / workflow).resolve()), result['references'])
+
     def test_unknown_platform_or_missing_role_never_falls_back(self):
-        for platform, step in (('linux', 'code'), ('', 'code'), ('macos', 'csharp-winui'), ('macos', 'distribute')):
+        for platform, step in (('linux', 'code'), ('', 'code'), ('macos', 'csharp-winui'), ('macos', 'not-a-role')):
             with self.assertRaises(ValueError):
                 resolver.resolve(platform, step)
 
@@ -69,6 +149,9 @@ class RoutingTests(unittest.TestCase):
         for roles in self.catalog['platforms'].values():
             entries.update(roles.values())
         documents = [ROOT / entry / 'PROCEDURE.md' for entry in entries]
+        shared = {ROOT / item for roles in self.catalog['references'].values() for items in roles.values() for item in items if Path(item).name == 'PROCEDURE.md'}
+        documents.extend(sorted(shared))
+        self.assertEqual(set(documents), set(ROOT.rglob('PROCEDURE.md')))
         documents.extend(REPO / path.removeprefix('./') / 'SKILL.md' for path in public)
         names = [re.search(r'^name: (.+)$', doc.read_text(), re.M).group(1) for doc in documents]
         self.assertEqual(len(names), len(set(names)))
