@@ -4,12 +4,12 @@
     "name": "Hoyeon Kim",
     "url": "https://github.com/hoy2on"
   },
-  "description": "BAA 통합 앱 개발 스킬",
+  "description": "BAA — Build Any App. Agent skills for Apple, Android, and Windows.",
   "plugins": [
     {
       "name": "baa",
       "source": "./",
-      "description": "중앙 라우터와 Apple·Android·Windows 직접 호출을 제공하는 BAA 통합 앱 개발 플러그인."
+      "description": "One router with Apple, Android, and Windows entry points for app planning, implementation, design, and verification."
     }
   ]
 }
