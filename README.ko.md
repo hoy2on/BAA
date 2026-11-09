@@ -14,7 +14,7 @@ Apple · Android · Windows<br>
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-compatible-5E5CE6)](#설치)
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-[빠른 시작](#빠른-시작) · [동작 방식](#동작-방식) · [명령](#명령) · [설치](#설치) · [개발과 검증](#개발과-검증)
+[빠른 시작](#빠른-시작) · [동작 방식](#동작-방식) · [명령](#명령) · [스킬](#스킬) · [설치](#설치) · [개발과 검증](#개발과-검증)
 
 </div>
 
@@ -39,13 +39,29 @@ Codex와 다른 에이전트의 설치 방법은 [설치](#설치)를 참고하�
 
 ## 동작 방식
 
-BAA 중앙 라우터 → 플랫폼 담당 절차 → 현재 작업에 필요한 전문 절차 → 검증·결과 통합 순서로 진행합니다.
+만들 앱이나 변경할 내용을 한 번 요청하면 BAA가 대상을 확인하고, 현재 작업에 필요한 전문 절차를 선택해 검증까지 이어갑니다.
 
-요청에 플랫폼이 있으면 그대로 사용합니다. 없으면 현재 작업에서 확정한 범위, 지정 파일·모듈의 실제 타깃, 프로젝트의 지원 대상을 확인합니다. 대상이 분명하면 알리고 진행하며, 여러 후보가 남으면 어떤 플랫폼을 작업할지 질문합니다. 실행 중인 컴퓨터의 OS나 Swift·Kotlin 같은 언어 이름만으로 대상을 선택하지 않습니다.
+| 단계 | BAA가 하는 일 | 결과물 |
+| --- | --- | --- |
+| 1. 대상 선택 | 요청한 플랫폼과 프로젝트의 실제 타깃을 확인하고, 후보가 여러 개 남으면 질문합니다. | 대상 플랫폼·작업 범위·시작 단계 |
+| 2. 기획 | 새 앱은 조사·참고 앱 분석(선택)을 거쳐 개요·스토리·완료 기준을 정합니다. 기존 앱은 합의된 계획을 재사용합니다. | 범위가 정해진 계획과 확인 가능한 사용자 흐름 |
+| 3. 디자인 | 탐색·상태·문구·접근성을 설계하고, 대상 플랫폼의 배치·입력·시각적 관례를 적용합니다. | UX 결정과 요청한 디자인 시안 또는 구현 방향 |
+| 4. 구현 | 새 앱에만 프로젝트를 생성하고, 필요한 플랫폼 코드·OS 연동·디자인 절차로 합의한 기능을 구현합니다. | 담당 범위 안의 소스 변경 |
+| 5. 검증·통합 | 사용 가능한 대상 환경에서 빌드·테스트·영향받는 동작을 확인하고, 발견한 결함을 수정한 뒤 공유 변경을 통합합니다. | 수행한 검사의 증거, 남은 검사와 재개 조건 |
 
-새 앱은 조사 → 참고 앱 분석(선택) → 개요 → 사용자 요구사항 → 프로젝트 생성 → 디자인 → 구현·검증으로 이어집니다. 기존 앱의 기능 수정이나 디자인 개선은 필요한 단계부터 시작합니다. 디자인만 요청했는데 새 앱이나 전체 기획을 만들지 않습니다.
+위 단계는 새 앱의 전체 흐름이며 매번 처음부터 반복하는 절차가 아닙니다. 요청에서 지정했거나 프로젝트 근거로 확인한 플랫폼을 사용하고, 실행 중인 컴퓨터의 OS나 언어 이름만으로 대상을 고르지 않습니다. 기존 앱은 필요한 단계부터 시작하며 현재 기술과 문서를 유지합니다.
 
-독립적인 플랫폼 작업은 사용 가능한 서브에이전트에 나눠 병렬로 진행합니다. 공유 파일은 한 담당자가 맡고, 같은 기기·빌드 출력·설치본을 사용하는 검증은 순서대로 진행합니다. 병렬 도구가 없으면 순차 수행합니다.
+### 요청에 맞는 단계부터 시작합니다
+
+| 요청 | 진행 방식 |
+| --- | --- |
+| “이런 기능을 하는 앱 만들어줘” | 플랫폼을 정하고 합의한 범위의 기획·디자인·프로젝트 생성·구현·검증을 진행합니다. |
+| “디자인 시안 다섯 개 만들어줘” 또는 “더 나은 UX를 제안해줘” | 현재 화면과 플랫폼 관례를 분석한 뒤 요청한 대안과 이유를 제시합니다. 제안만 요청한 경우 앱을 수정하지 않습니다. |
+| “이 기능 구현해줘” 또는 “이 디자인으로 적용해줘” | 기존 계획이나 선택한 시안을 이어받아 구현·검증하며 조사나 프로젝트 생성을 다시 시작하지 않습니다. |
+
+독립적인 플랫폼 작업은 사용 가능한 서브에이전트에 나눌 수 있습니다. 공통 동작과 디자인 결정은 한 번 정하고 공유 파일은 한 담당자가 맡습니다. 같은 기기·빌드 출력·dev 설치본을 사용하는 검사는 순서대로 수행하며, 병렬 도구가 없으면 작업도 순차로 진행합니다.
+
+빌드 성공·실제 UI 조작·실기기 검증은 구분해서 보고합니다. 기기나 권한이 없으면 해당 검사를 통과가 아닌 대기로 남깁니다. 커밋·앱 설치·외부 게시는 실제 승인 범위를 따르며, 앱 제작을 요청했다고 스토어에 자동 게시하지 않습니다.
 
 ## 명령
 
@@ -69,17 +85,49 @@ BAA 중앙 라우터 → 플랫폼 담당 절차 → 현재 작업에 필요한 
 
 `전체`는 기존 프로젝트에서는 해당 명령 범위 안의 실제 지원 타깃 전체, 새 앱에서는 해당 명령이 허용하는 플랫폼 전체입니다. 없는 플랫폼을 요청 없이 추가하지 않습니다.
 
-## 전문 스킬
+## 스킬
 
-| 영역 | 사용하는 절차 |
-| --- | --- |
-| 공통 | 조사, 앱 개요, 사용자 스토리, UX, 구조 검토, 개선 순환 |
-| macOS | Swift·SwiftUI·AppKit, macOS 디자인, OS 연동, 성능, 빌드·테스트·배포 |
-| iOS·iPadOS | Swift·SwiftUI·UIKit 공유 구현, 기기별 네이티브 디자인, OS 연동, 성능, 빌드·테스트·배포 준비 |
-| Android | Kotlin·Compose·Views, Android 디자인, OS 연동, 성능, Gradle·adb 검증, 배포 준비 |
-| Windows | Tauri 2·Rust·기존 웹 프런트엔드·WebView2, Windows 디자인, OS 연동, 성능, 빌드·테스트·배포 |
+단계는 작업을 찾기 위한 분류이며 강제 실행 순서가 아닙니다. 기존 앱에서는 요청한 기능·디자인·검증 단계부터 시작합니다. 공개 명령어는 위의 네 개뿐이며, 아래 이름은 BAA가 내부에서 선택하는 역할입니다. 플랫폼별 역할은 [routing.json](skills/baa/routing.json)에서 실제 문서로 연결됩니다.
 
-단계 이름이 같아도 플랫폼별 구현을 합치지 않습니다. Apple·Android 기존 앱의 기술을 템플릿에 맞춰 바꾸지 않습니다. Windows는 Tauri만 지원하며 다른 기술의 프로젝트는 명시적으로 이전 범위를 합의한 후에 변경합니다. macOS 배포 절차는 실제 프로젝트의 직접 배포·App Store 릴리즈 방식을 조사해 사용합니다.
+| 단계 | 스킬·역할 | 하는 일 |
+| --- | --- | --- |
+| 시작 | [`baa`](skills/baa/SKILL.md) | 대상 플랫폼과 현재 작업을 정하고, 모호할 때만 질문합니다. |
+| 시작 | `router` | 선택한 플랫폼에서 지금 필요한 전문 절차를 연결합니다. |
+| 시작 | [`app-brief`](skills/baa/common/baa-app-brief/PROCEDURE.md) | 새 앱의 목표와 범위를 개요로 정리하고 기존 개요는 재사용합니다. |
+| 시작 | `scaffold` | 선택한 플랫폼의 새 프로젝트와 별도 dev 식별자를 구성합니다. |
+| 기획 | [`research`](skills/baa/common/baa-research/PROCEDURE.md) | 요청과 관련된 사용자·참고 제품·UX·기술 제약을 조사합니다. |
+| 기획 | `clone` | 참고 앱의 화면과 동작을 분석하고 확인 근거를 기록합니다. |
+| 기획 | [`user-stories`](skills/baa/common/baa-user-stories/PROCEDURE.md) | 사용자 행동·의존성·단계별 목표와 확인 가능한 완료 기준을 정합니다. |
+| 구현 | `code` | 선택한 플랫폼과 기존 구조로 합의한 기능을 구현합니다. |
+| 구현 | `os-integrations` | 기능에 필요한 OS 서비스·권한·수명주기 처리를 연결합니다. |
+| 구현 | `performance` | 재현 가능한 병목을 측정하고 원인을 수정한 뒤 결과를 비교합니다. |
+| 구현 | [`improve-architecture`](skills/baa/common/baa-improve-architecture/PROCEDURE.md) | 실제 구조 문제를 검토하고 동작을 보존하는 근거 있는 변경만 수행합니다. |
+| 구현 | `agent-cli` | 요청된 경우 해당 플랫폼에서 가능한 자동화·CLI 연동을 제한된 범위로 구성합니다. |
+| 디자인 | [`ux-design`](skills/baa/common/baa-ux-design/PROCEDURE.md) | 구현 전에 행동 이름·탐색·표현 방식·상태·문구·접근성을 설계합니다. |
+| 디자인 | `native-design` | 창·화면·입력·상호작용을 플랫폼 관례에 맞춥니다. Windows에서는 Tauri 웹 콘텐츠를 다룹니다. |
+| 디자인 | `design-system` | 필요한 의미 기반 색상·서체·간격·테마·모션 토큰을 재사용하거나 정합니다. |
+| 디자인 | `layout-grid` | 변경 화면의 간격·정렬·잘림과 필요한 화면 크기·배율 대응을 점검합니다. |
+| 디자인 | `design-kit` | 앱의 컴포넌트와 상호작용 상태를 재사용하거나 확장합니다. |
+| 디자인 | `design-from-app` | 제공된 시각 자료를 앱에 맞게 적용하고 같은 화면·상태로 비교합니다. |
+| 디자인 | `app-icon` | 기존 원본을 보존하며 플랫폼별 앱 아이콘과 관련 자산을 준비합니다. |
+| 검증·배포 | `build-and-verify` | 영향받는 앱 동작을 빌드·실행 확인하고 컴파일과 런타임 증거를 구분합니다. |
+| 검증·배포 | `test` | 기존 프로젝트 도구를 우선 활용해 관련 로직·통합·UI 검사를 수행합니다. |
+| 검증·배포 | [`improve-loop`](skills/baa/common/baa-improve-loop/PROCEDURE.md) | 합의한 스토리의 계획·구현·검증·수정·기록을 반복하고, 승인된 경우에만 커밋합니다. |
+| 검증·배포 | `distribute` | 요청한 패키징·서명·배포 단계를 준비하며 게시·설치 권한을 임의로 확대하지 않습니다. |
+
+### 플랫폼별 전문 절차
+
+공통 조사·기획·UX·구조 검토·반복 실행은 위 문서를 함께 사용합니다. 플랫폼에 따라 달라지는 시작·코드·디자인·테스트 절차의 실제 연결은 다음과 같습니다. OS 연동·성능·디자인 토큰·배포도 같은 방식으로 해당 플랫폼 문서에 연결됩니다. iOS·iPadOS는 기기별 전문 절차와 Apple 공통 기반을 함께 읽습니다.
+
+| 플랫폼 | 새 앱 | 구현 | 플랫폼 UX·디자인 | 테스트 |
+| --- | --- | --- | --- | --- |
+| macOS | [new-mac-app](skills/baa/platforms/apple/macos/skills/start/new-mac-app/PROCEDURE.md) | [Swift / SwiftUI / AppKit](skills/baa/platforms/apple/macos/skills/code/swift-swiftui/PROCEDURE.md) | [mac-design](skills/baa/platforms/apple/macos/skills/design/mac-design/PROCEDURE.md) | [test-mac-app](skills/baa/platforms/apple/macos/skills/ship/test-mac-app/PROCEDURE.md) |
+| iOS | [new-ios-app](skills/baa/platforms/apple/ios/skills/start/new-ios-app/PROCEDURE.md) | [Swift / SwiftUI / UIKit](skills/baa/platforms/apple/ios/skills/code/baa-ios-code/PROCEDURE.md) | [iOS design](skills/baa/platforms/apple/ios/skills/design/baa-ios-design/PROCEDURE.md) | [iOS tests](skills/baa/platforms/apple/ios/skills/ship/baa-ios-test/PROCEDURE.md) |
+| iPadOS | [new-ipados-app](skills/baa/platforms/apple/ipados/skills/start/new-ipados-app/PROCEDURE.md) | [Swift / SwiftUI / UIKit](skills/baa/platforms/apple/ipados/skills/code/baa-ipados-code/PROCEDURE.md) | [iPadOS design](skills/baa/platforms/apple/ipados/skills/design/baa-ipados-design/PROCEDURE.md) | [iPadOS tests](skills/baa/platforms/apple/ipados/skills/ship/baa-ipados-test/PROCEDURE.md) |
+| Android | [new-android-app](skills/baa/platforms/android/skills/start/new-android-app/PROCEDURE.md) | [Kotlin / Compose / Views](skills/baa/platforms/android/skills/code/baa-android-code/PROCEDURE.md) | [Android design](skills/baa/platforms/android/skills/design/baa-android-native-design/PROCEDURE.md) | [Android tests](skills/baa/platforms/android/skills/ship/baa-android-test/PROCEDURE.md) |
+| Windows | [new-windows-app](skills/baa/platforms/windows/skills/start/new-windows-app/PROCEDURE.md) | [Tauri / Rust / web frontend](skills/baa/platforms/windows/skills/code/tauri/PROCEDURE.md) | [Windows Tauri design](skills/baa/platforms/windows/skills/design/windows-design/PROCEDURE.md) | [Tauri tests](skills/baa/platforms/windows/skills/ship/test-windows-app/PROCEDURE.md) |
+
+신규 Android 템플릿은 Compose 기반이며 기존 Views 앱은 요청 없이 전환하지 않습니다. Windows는 Tauri만 지원하고 기존 웹 프런트엔드는 유지합니다. 다른 Windows 기술의 프로젝트는 이전 범위를 명시적으로 합의한 후에 변경합니다. macOS 배포는 프로젝트의 실제 직접 배포·App Store 방식을 조사해 진행합니다.
 
 ## 설치
 

@@ -14,7 +14,7 @@ Agent skills that connect planning, coding, design improvements, builds, and ver
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-compatible-5E5CE6)](#install)
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-[Quick start](#quick-start) · [How it works](#how-it-works) · [Commands](#commands) · [Install](#install) · [Development and verification](#development-and-verification)
+[Quick start](#quick-start) · [How it works](#how-it-works) · [Commands](#commands) · [Skills](#skills) · [Install](#install) · [Development and verification](#development-and-verification)
 
 </div>
 
@@ -39,13 +39,29 @@ See [Install](#install) for Codex and other agents.
 
 ## How it works
 
-Central BAA router → platform specialist → procedures needed for the current task → verification and integration.
+Describe the app or the change once. BAA identifies the target, selects the procedures needed for this task, and carries their results through verification.
 
-If your request names a target platform, BAA uses it. Otherwise, it checks the scope already agreed for the task, the actual targets of the files or modules you selected, and the platforms supported by the project. When the target is clear, BAA states it and proceeds. When multiple candidates remain, it asks which platforms to work on. The host OS or a language name such as Swift or Kotlin is not enough to choose a platform.
+| Step | What BAA does | Result |
+| --- | --- | --- |
+| 1. Select the target | Use your requested platforms and actual project targets; ask when several candidates remain. | Selected platforms, task scope and current stage. |
+| 2. Plan | For a new app, research the idea, optionally inspect a reference app, and define a brief, stories and acceptance. For an existing app, reuse the agreed plan. | A scoped plan and checkable user flows. |
+| 3. Design | Define navigation, states, copy and accessibility, then apply the selected platform's layout, input and visual conventions. | UX decisions and the requested design proposals or implementation direction. |
+| 4. Implement | Create a starter only for a new app, then implement the agreed behavior with the relevant platform code, OS integration and design procedures. | Source changes within the assigned scope. |
+| 5. Verify and integrate | Build, test and exercise affected behavior in the available target environment; fix observed defects and integrate shared changes. | Evidence for completed checks, plus any pending checks and their resumption conditions. |
 
-For a new app, the workflow is research → reference app analysis (optional) → brief → user stories → scaffold → design → implementation and verification. For an existing app, BAA starts at the stage your request needs. A design-only request does not restart planning or create a new app.
+These steps describe the new-app path, not a mandatory restart for every request. BAA uses the platform named in your request or confirmed by the project; a host OS or a language name alone is not enough. Existing-app work enters at the relevant stage and keeps its current technology and documents.
 
-Independent platform work can run in parallel through available subagents. Shared files have one owner. Verification that uses the same device, build output, or installation runs sequentially. Without parallel agent tools, BAA works sequentially.
+### Start where your task needs it
+
+| Request | Workflow |
+| --- | --- |
+| “Build an app that…” | Select the platform, plan the agreed scope, design, scaffold, implement and verify. |
+| “Create five design proposals” or “Suggest better UX” | Inspect the current screens and platform conventions, then return the requested alternatives and rationale. A proposal-only request does not authorize changing the app. |
+| “Implement this feature” or “Apply this design” | Reuse the existing plan or selected design, implement the affected behavior, and verify it without restarting research or scaffolding. |
+
+Independent platform work can run through available subagents. Shared behavior and design decisions are agreed once, and shared files have one owner. Checks using the same device, build output or dev installation run sequentially; without parallel tools, work proceeds sequentially.
+
+Build success, actual UI interaction and physical-device verification are reported separately. Missing devices or permissions leave the affected checks pending, not passed. Commits, app installation and external publication remain within your actual authorization; a request to build an app does not automatically publish it to a store.
 
 ## Commands
 
@@ -69,17 +85,49 @@ Plugin installations may show namespaced commands such as `/baa:baa` or `/baa:ba
 
 For an existing project, “all” means the supported targets within the command's scope. For a new app, it means all platforms allowed by that command. BAA does not add unsupported platforms without a request to do so.
 
-## Specialist skills
+## Skills
 
-| Area | Procedures |
-| --- | --- |
-| Shared | Research, app briefs, user stories, UX, architecture review, and improvement loops |
-| macOS | Swift, SwiftUI, and AppKit; macOS design, OS integration, performance, builds, and tests |
-| iOS and iPadOS | Shared Swift, SwiftUI, and UIKit implementation; device-specific native design, OS integration, performance, builds, tests, and distribution preparation |
-| Android | Kotlin, Compose, and Views; Android design, OS integration, performance, Gradle and adb verification, and distribution preparation |
-| Windows | Tauri 2, Rust, the existing web frontend, and WebView2; Windows design, OS integration, performance, builds, tests, and distribution |
+Stages help select the work; they are not a mandatory execution sequence. Existing-app requests start at the relevant feature, design, or verification step. Only the four commands above are public. The names below are internal roles selected by BAA; platform roles resolve to their actual documents through [routing.json](skills/baa/routing.json).
 
-Stages may share names without sharing platform implementations. Existing Apple/Android technologies are not converted to match a template. Windows procedures support Tauri only; other technologies require an explicitly agreed migration scope. BAA's macOS distribution procedure inspects the project's actual direct-distribution or App Store release workflow.
+| Stage | Skill / role | What it does |
+| --- | --- | --- |
+| Start | [`baa`](skills/baa/SKILL.md) | Select the target platforms and current task; ask only when the target is ambiguous. |
+| Start | `router` | Connect the selected platform to the procedure needed now. |
+| Start | [`app-brief`](skills/baa/common/baa-app-brief/PROCEDURE.md) | Turn a new app idea into a scoped brief; reuse an existing brief. |
+| Start | `scaffold` | Create a new project from the selected platform starter, with a separate dev identity. |
+| Plan | [`research`](skills/baa/common/baa-research/PROCEDURE.md) | Investigate the users, reference products, UX and technical constraints relevant to the request. |
+| Plan | `clone` | Inspect a supplied reference app and record screens, behaviors and evidence. |
+| Plan | [`user-stories`](skills/baa/common/baa-user-stories/PROCEDURE.md) | Define user actions, dependencies, milestones and checkable acceptance criteria. |
+| Code | `code` | Implement the agreed behavior using the selected platform and existing architecture. |
+| Code | `os-integrations` | Connect only the OS services the feature needs, with permissions and lifecycle handling. |
+| Code | `performance` | Measure a reproducible bottleneck, fix its cause, and compare the result. |
+| Code | [`improve-architecture`](skills/baa/common/baa-improve-architecture/PROCEDURE.md) | Review actual structural problems and make only justified, behavior-preserving changes. |
+| Code | `agent-cli` | When requested, add a scoped automation or CLI integration using the platform's available mechanisms. |
+| Design | [`ux-design`](skills/baa/common/baa-ux-design/PROCEDURE.md) | Decide action names, navigation, presentation, states, copy and accessibility before implementation. |
+| Design | `native-design` | Apply platform-specific window, screen, input and interaction conventions, including Tauri web content on Windows. |
+| Design | `design-system` | Reuse or define the required semantic colors, typography, spacing, themes and motion tokens. |
+| Design | `layout-grid` | Check the changed layout for spacing, alignment, clipping and relevant size or scale behavior. |
+| Design | `design-kit` | Reuse or extend the app's components and their interaction states. |
+| Design | `design-from-app` | Adapt a supplied visual reference and compare matching screens and states. |
+| Design | `app-icon` | Prepare the platform's app and related icon assets, preserving existing sources. |
+| Ship | `build-and-verify` | Build and exercise the affected app behavior; distinguish compilation from actual runtime evidence. |
+| Ship | `test` | Run the relevant logic, integration and UI checks using existing project tools where suitable. |
+| Ship | [`improve-loop`](skills/baa/common/baa-improve-loop/PROCEDURE.md) | Work through the agreed stories: plan, implement, verify, fix and record; commit only when authorized. |
+| Ship | `distribute` | Prepare the requested packaging, signing or distribution stage without assuming permission to publish or install. |
+
+### Platform specialists
+
+Research, planning, UX, architecture review and iteration share the common procedures above. These links show the actual platform-specific starters, code, design and test procedures. OS integration, performance, design tokens and distribution likewise resolve to the selected platform. iOS and iPadOS combine device-specific specialists with shared Apple bases.
+
+| Platform | New app | Code | Platform UX / design | Tests |
+| --- | --- | --- | --- | --- |
+| macOS | [new-mac-app](skills/baa/platforms/apple/macos/skills/start/new-mac-app/PROCEDURE.md) | [Swift / SwiftUI / AppKit](skills/baa/platforms/apple/macos/skills/code/swift-swiftui/PROCEDURE.md) | [mac-design](skills/baa/platforms/apple/macos/skills/design/mac-design/PROCEDURE.md) | [test-mac-app](skills/baa/platforms/apple/macos/skills/ship/test-mac-app/PROCEDURE.md) |
+| iOS | [new-ios-app](skills/baa/platforms/apple/ios/skills/start/new-ios-app/PROCEDURE.md) | [Swift / SwiftUI / UIKit](skills/baa/platforms/apple/ios/skills/code/baa-ios-code/PROCEDURE.md) | [iOS design](skills/baa/platforms/apple/ios/skills/design/baa-ios-design/PROCEDURE.md) | [iOS tests](skills/baa/platforms/apple/ios/skills/ship/baa-ios-test/PROCEDURE.md) |
+| iPadOS | [new-ipados-app](skills/baa/platforms/apple/ipados/skills/start/new-ipados-app/PROCEDURE.md) | [Swift / SwiftUI / UIKit](skills/baa/platforms/apple/ipados/skills/code/baa-ipados-code/PROCEDURE.md) | [iPadOS design](skills/baa/platforms/apple/ipados/skills/design/baa-ipados-design/PROCEDURE.md) | [iPadOS tests](skills/baa/platforms/apple/ipados/skills/ship/baa-ipados-test/PROCEDURE.md) |
+| Android | [new-android-app](skills/baa/platforms/android/skills/start/new-android-app/PROCEDURE.md) | [Kotlin / Compose / Views](skills/baa/platforms/android/skills/code/baa-android-code/PROCEDURE.md) | [Android design](skills/baa/platforms/android/skills/design/baa-android-native-design/PROCEDURE.md) | [Android tests](skills/baa/platforms/android/skills/ship/baa-android-test/PROCEDURE.md) |
+| Windows | [new-windows-app](skills/baa/platforms/windows/skills/start/new-windows-app/PROCEDURE.md) | [Tauri / Rust / web frontend](skills/baa/platforms/windows/skills/code/tauri/PROCEDURE.md) | [Windows Tauri design](skills/baa/platforms/windows/skills/design/windows-design/PROCEDURE.md) | [Tauri tests](skills/baa/platforms/windows/skills/ship/test-windows-app/PROCEDURE.md) |
+
+New Android starters use Compose; existing Views apps are not migrated without a request. Windows work uses Tauri only and retains the existing web frontend; other Windows technologies require an explicitly agreed migration scope. macOS distribution follows the actual project's direct-distribution or App Store workflow.
 
 ## Install
 
