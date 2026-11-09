@@ -1,4 +1,4 @@
 interface:
-  display_name: "BAA — Build Any App"
+  display_name: "BAA"
   short_description: "Identify target platforms and route app work to Apple, Android and Windows specialists."
   default_prompt: "Use $baa for the assigned stage. Preserve the platform context and scope, and respond in the user's language."
