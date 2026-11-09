@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows app-icon"
-  short_description: "BAA windows app-icon procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

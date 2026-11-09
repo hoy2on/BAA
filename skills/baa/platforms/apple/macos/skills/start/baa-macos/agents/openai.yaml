@@ -1,5 +1,5 @@
 interface:
-  display_name: "BAA macos bama"
-  short_description: "BAA macos bama procedure for the assigned platform and task."
+  display_name: "BAA macos baa"
+  short_description: "BAA macos baa procedure for the assigned platform and task."
 policy:
   allow_implicit_invocation: false

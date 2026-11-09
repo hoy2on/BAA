@@ -1,0 +1,14 @@
+{
+  "macos": {
+    "repository": "https://github.com/daveebbelaar/bama",
+    "commit": "639893c397278256f1ae204dd8f837eb82bd6527",
+    "license": "macos-upstream.txt",
+    "skills": 21
+  },
+  "windows": {
+    "repository": "https://github.com/daveebbelaar/bawa",
+    "commit": "54bb09a19cad751ed7e217477e81d5c7660221bd",
+    "license": "windows-upstream.txt",
+    "skills": 22
+  }
+}

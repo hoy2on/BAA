@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows design-from-app"
-  short_description: "BAA windows design-from-app procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

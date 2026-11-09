@@ -1,24 +1,19 @@
 # Specs
 
-Build plans for small Mac apps you can build today with BAMA. Each spec is
+Build plans for small Mac apps you can build today with BAA. Each spec is
 one app. Give it to your agent and it builds the app for you.
-
-I took these apart from Onyx, my own menu bar app that replaces Magnet,
-AltTab, Alfred, CleanShot, and a few more. Onyx does everything in one app.
-Each spec here is one part of it, cut down to an app you can build in an
-afternoon of agent time.
 
 ## Build one
 
-Install BAMA, copy a spec into an empty folder, open your agent there, and
+Install BAA, copy a spec into an empty folder, open your agent there, and
 tell it:
 
 ```text
-Build the app in window-snapper.md with BAMA.
+Build the app in window-snapper.md with BAA.
 ```
 
 A link works too:
-`https://github.com/daveebbelaar/bama/blob/main/specs/window-snapper.md`.
+`https://github.com/hoy2on/BAA/blob/main/skills/baa/platforms/apple/macos/specs/window-snapper.md`.
 
 The agent copies the spec's **Brief** into `docs/BRIEF.md` and its
 **Stories** into `docs/STORIES.md`, then runs `baa-macos-new-mac-app` and

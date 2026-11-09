@@ -42,7 +42,7 @@ SwiftData database and no server.
 
 ## Skills
 
-The bama plugin has a skill for each step: `baa-macos-mac-design` (design rules),
+The baa plugin has a skill for each step: `baa-macos-mac-design` (design rules),
 `baa-macos-design-system` (accent and tokens), `baa-macos-layout-grid`, `baa-ux-design`,
 `baa-macos-swift-swiftui`, `baa-macos-os-integrations`, `baa-macos-performance`, `baa-macos-build-and-verify`,
 `baa-macos-test-mac-app`, `baa-macos-app-icon`, `baa-user-stories`, and `baa-improve-loop`. Use them.

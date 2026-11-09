@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows test-windows-app"
-  short_description: "BAA windows test-windows-app procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

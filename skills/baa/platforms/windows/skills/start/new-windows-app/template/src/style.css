@@ -1,0 +1,8 @@
+ :root { font-family: system-ui, sans-serif; color-scheme: light dark; }
+body { margin: 0; }
+main { max-width: 42rem; margin: auto; padding: 2rem; }
+form { display: grid; gap: .75rem; }
+input, button { font: inherit; padding: .5rem .75rem; }
+:focus-visible { outline: 2px solid Highlight; outline-offset: 3px; }
+#result { overflow-wrap: anywhere; }
+@media (forced-colors: active) { input, button { border: 1px solid ButtonText; } }

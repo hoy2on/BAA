@@ -11,7 +11,7 @@ Resolve follow-up roles with `python3 scripts/resolve.py --entrypoint <entrypoin
 
 The coordinator is the sole editor of shared BRIEF/STORIES/GLOSSARY/research/review documents. Platform owners return proposals and evidence, not concurrent edits. In solo execution, the current worker holds that role.
 
-Preserve BAMA/BAWA's one-page BRIEF → user-stories/scaffold connection. Local existing-screen design work does not require a new BRIEF.
+Preserve BAA's one-page BRIEF → user-stories/scaffold connection. Local existing-screen design work does not require a new BRIEF.
 
 ## 1. Name and read
 

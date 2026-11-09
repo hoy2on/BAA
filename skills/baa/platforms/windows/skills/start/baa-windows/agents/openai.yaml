@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows bawa"
-  short_description: "BAA windows bawa procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

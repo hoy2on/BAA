@@ -20,7 +20,7 @@ class RoutingTests(unittest.TestCase):
         self.manifest = json.loads((REPO / '.claude-plugin/plugin.json').read_text())
 
     def test_platform_and_common_dispatch(self):
-        expected = {'macos': 'baa-macos-swift-swiftui', 'windows': 'baa-windows-csharp-winui'}
+        expected = {'macos': 'baa-macos-swift-swiftui', 'windows': 'baa-windows-tauri'}
         for platform in self.catalog['platforms']:
             for step in self.catalog['platforms'][platform].keys() | self.catalog['common'].keys():
                 result = resolver.resolve(platform, step)
@@ -114,7 +114,7 @@ class RoutingTests(unittest.TestCase):
                         self.assertNotIn(str((relocated / workflow).resolve()), result['references'])
 
     def test_unknown_platform_or_missing_role_never_falls_back(self):
-        for platform, step in (('linux', 'code'), ('', 'code'), ('macos', 'csharp-winui'), ('macos', 'not-a-role')):
+        for platform, step in (('linux', 'code'), ('', 'code'), ('macos', 'tauri'), ('macos', 'not-a-role')):
             with self.assertRaises(ValueError):
                 resolver.resolve(platform, step)
 
@@ -206,7 +206,7 @@ class RoutingTests(unittest.TestCase):
     def test_named_routes_preserve_direct_scope(self):
         self.assertEqual(resolver.resolve_name('baa-research', entrypoint='baa-android')['name'], 'baa-research')
         self.assertEqual(resolver.resolve_name('baa-macos-mac-design', entrypoint='baa-apple')['name'], 'baa-macos-mac-design')
-        for entrypoint, name in [('baa-android', 'baa-macos-mac-design'), ('baa-apple', 'baa-windows-csharp-winui')]:
+        for entrypoint, name in [('baa-android', 'baa-macos-mac-design'), ('baa-apple', 'baa-windows-tauri')]:
             with self.assertRaises(ValueError):
                 resolver.resolve_name(name, entrypoint=entrypoint)
         for entrypoint in self.catalog['entrypoints']:

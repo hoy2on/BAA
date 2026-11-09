@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows build-and-verify"
-  short_description: "BAA windows build-and-verify procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

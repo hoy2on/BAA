@@ -5,7 +5,7 @@ description: Make a macOS app fast by measuring hangs, stutter, CPU, memory, and
 
 ## BAA execution context
 
-Read [BAA execution rules](../../../../../../EXECUTION.md) before this platform procedure. This skill belongs to the macos pack. Preserve the selected platform, task type, ownership and verification environment. Resolve all follow-up skills through BAA, never an external BAMA/BAWA installation. Existing project settings and dev-install rules override template examples.
+Read [BAA execution rules](../../../../../../EXECUTION.md) before this platform procedure. This skill belongs to the macos pack. Preserve the selected platform, task type, ownership and verification environment. Resolve follow-up procedures within the current BAA package. Existing project settings and dev-install rules override template examples.
 
 
 

@@ -50,7 +50,7 @@
       "router": "platforms/windows/skills/start/baa-windows",
       "clone": "platforms/windows/skills/plan/clone",
       "scaffold": "platforms/windows/skills/start/new-windows-app",
-      "code": "platforms/windows/skills/code/csharp-winui",
+      "code": "platforms/windows/skills/code/tauri",
       "os-integrations": "platforms/windows/skills/code/os-integrations",
       "performance": "platforms/windows/skills/code/performance",
       "agent-cli": "platforms/windows/skills/code/agent-cli",

@@ -1,5 +1,5 @@
 #!/bin/zsh
-# Adds the agent CLI and MCP server to an app made from the bama template.
+# Adds the agent CLI and MCP server to an app made from the baa template.
 # Usage: add-agent-cli.sh <app-folder> <cli-name>
 #   add-agent-cli.sh ~/Developer/Tasks tasks
 # Copies Sources/<App>/Agent/*.swift and Sources/<App>/Main.swift, moves @main
@@ -15,7 +15,7 @@ here=${0:A:h}
 template=${here:h}/template
 name=$(basename "$(find "$app_dir/Sources" -mindepth 1 -maxdepth 1 -type d | head -1)")
 src="$app_dir/Sources/$name"
-[[ -f "$src/App.swift" ]] || { echo "no $src/App.swift: is this an app from the bama template?"; exit 1; }
+[[ -f "$src/App.swift" ]] || { echo "no $src/App.swift: is this an app from the baa template?"; exit 1; }
 [[ ! -e "$src/Agent" ]] || { echo "$src/Agent already exists"; exit 1; }
 
 mkdir -p "$src/Agent"

@@ -1,4 +1,4 @@
-"""Exercise the adapted BAMA scaffold and install guards without building or installing an app."""
+"""Exercise the adapted BAA scaffold and install guards without building or installing an app."""
 import os
 import sys
 from pathlib import Path

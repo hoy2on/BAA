@@ -18,7 +18,7 @@ For iOS, verify the actual iPhone viewport, text size, touch area, keyboard/safe
 
 For Android, verify the actual variant/serial, dp/sp/font-scale behavior, IME/system insets, Back, Activity recreation/restoration, TalkBack semantics and the requested window classes. Use current Material/Views conventions rather than Apple's pt values.
 
-For Windows, verify the actual WinUI/WPF/etc. controls, window/display scaling, keyboard/focus/access keys, pointer states, theme/high-contrast and relevant automation semantics. Don't infer Windows runtime correctness from a Mac review of XAML.
+For Windows, verify the actual Tauri window and WebView2 content, DOM semantics, window/display scaling, keyboard/focus/access keys, pointer states, theme/high-contrast and relevant automation semantics. Don't infer Windows runtime correctness from a frontend preview on macOS.
 
 ## Evidence and handoff
 

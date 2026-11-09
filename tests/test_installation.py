@@ -32,7 +32,7 @@ class InstallationTests(unittest.TestCase):
             self.assertTrue((runtime / 'LICENSES/macos-upstream.txt').is_file())
             self.assertTrue((runtime / 'LICENSES/windows-upstream.txt').is_file())
             self.assertTrue((runtime / 'platforms/apple/macos/skills/start/new-mac-app/template/build.sh').is_file())
-            self.assertTrue((runtime / 'platforms/windows/skills/start/new-windows-app/template/build.ps1').is_file())
+            self.assertTrue((runtime / 'platforms/windows/skills/start/new-windows-app/template/src-tauri/tauri.conf.json').is_file())
 
     def test_manual_links_are_idempotent_and_do_not_expose_internal_procedures(self):
         with tempfile.TemporaryDirectory(prefix='baa-link-') as folder:

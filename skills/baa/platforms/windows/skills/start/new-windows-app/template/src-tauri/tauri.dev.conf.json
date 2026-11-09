@@ -1,0 +1,19 @@
+{
+  "productName": "__APP_NAME__-dev",
+  "identifier": "__BUNDLE_ID__",
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "__APP_NAME__-dev",
+        "width": 1000,
+        "height": 720,
+        "minWidth": 480,
+        "minHeight": 360
+      }
+    ]
+  },
+  "bundle": {
+    "active": false
+  }
+}

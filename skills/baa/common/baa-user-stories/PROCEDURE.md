@@ -11,7 +11,7 @@ Resolve follow-up roles with `python3 scripts/resolve.py --entrypoint <entrypoin
 
 The coordinator is the sole editor of shared BRIEF/STORIES/GLOSSARY/research/review documents. Platform owners return proposals and evidence, not concurrent edits. In solo execution, the current worker holds that role.
 
-Turn screens into user actions and verifiable acceptance. Preserve BAMA/BAWA stories, dependencies, milestones, UX blocks and verification tags.
+Turn screens into user actions and verifiable acceptance. Preserve BAA stories, dependencies, milestones, UX blocks and verification tags.
 
 ## Read and map
 

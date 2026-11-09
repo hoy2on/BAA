@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows os-integrations"
-  short_description: "BAA windows os-integrations procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

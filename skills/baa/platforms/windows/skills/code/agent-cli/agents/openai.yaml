@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows agent-cli"
-  short_description: "BAA windows agent-cli procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

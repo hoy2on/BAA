@@ -122,7 +122,7 @@ class MobileTemplateTests(unittest.TestCase):
                  ("android", "Notes", "com.example.bad-id", "17.0"),
                  ("ios", "Notes", "com.example/notes", "17.0"),
                  ("ios", "Notes", "com.example.notes", "16.0"),
-                 ("windows", "Notes", "com.example.notes", "17.0")]
+                 ("linux", "Notes", "com.example.notes", "17.0")]
         with tempfile.TemporaryDirectory(prefix="baa-invalid-") as folder:
             for platform, name, identifier, minimum in cases:
                 with self.subTest(platform=platform, name=name, identifier=identifier, minimum=minimum):

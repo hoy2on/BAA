@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create a new native mobile app from BAA templates without overwriting files."""
+"""Create a new mobile or Windows Tauri app from BAA templates without overwriting files."""
 import argparse
 import json
 import os
@@ -10,10 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def create_app(platform, name, identifier, parent, min_os="17.0", root=ROOT):
-    if platform not in ("ios", "ipados", "android"):
-        raise ValueError("platform must be ios, ipados, or android")
+    if platform not in ("ios", "ipados", "android", "windows"):
+        raise ValueError("platform must be ios, ipados, android, or windows")
     if not re.fullmatch(r"[A-Z][A-Za-z0-9]*", name):
         raise ValueError("AppName must be UpperCamelCase letters and digits, like DailyNotes")
+    if platform == "windows" and re.fullmatch(r"(?i:con|prn|aux|nul|com[1-9]|lpt[1-9])", name):
+        raise ValueError("AppName is a reserved Windows device name")
     if not re.fullmatch(r"[A-Za-z][A-Za-z0-9-]*(?:\.[A-Za-z][A-Za-z0-9-]*)+", identifier):
         raise ValueError("identifier must be a reverse-domain ID containing letters, digits, dots and hyphens")
     release_id = identifier[:-4] if identifier.endswith(".dev") else identifier
@@ -35,6 +37,7 @@ def create_app(platform, name, identifier, parent, min_os="17.0", root=ROOT):
     templates.append(procedure / "template")
     values = {
         "__APP_NAME__": name,
+        "__PACKAGE_NAME__": name.lower(),
         "__PLATFORM__": platform,
         "__RELEASE_ID__": release_id,
         "__BUNDLE_ID__": release_id + ".dev",
@@ -51,7 +54,7 @@ def create_app(platform, name, identifier, parent, min_os="17.0", root=ROOT):
     if destination.is_symlink() or (destination.exists() and not destination.is_dir()):
         raise ValueError(f"Refusing non-directory or symlink destination: {destination}")
     if destination.exists():
-        markers = ("*.xcodeproj", "*.xcworkspace", "Package.swift", "settings.gradle*", "build.gradle*", "*.sln", "*.slnx")
+        markers = ("*.xcodeproj", "*.xcworkspace", "Package.swift", "settings.gradle*", "build.gradle*", "*.sln", "*.slnx", "tauri.conf.*", "Tauri.toml", "Cargo.toml", "package.json")
         if any(any(destination.rglob(pattern)) for pattern in markers):
             raise ValueError(f"Refusing to scaffold an existing project: {destination}")
     files = {}
@@ -82,7 +85,7 @@ def create_app(platform, name, identifier, parent, min_os="17.0", root=ROOT):
     for relative, source in files.items():
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        if source.suffix == ".jar":
+        if source.suffix in (".jar", ".png", ".ico"):
             with target.open("xb") as output:
                 output.write(source.read_bytes())
         else:
@@ -96,7 +99,7 @@ def create_app(platform, name, identifier, parent, min_os="17.0", root=ROOT):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("platform", choices=("ios", "ipados", "android"))
+    parser.add_argument("platform", choices=("ios", "ipados", "android", "windows"))
     parser.add_argument("name")
     parser.add_argument("identifier", help="Release/base ID; development uses a separate .dev ID")
     parser.add_argument("parent", nargs="?", default=str(Path.cwd()))

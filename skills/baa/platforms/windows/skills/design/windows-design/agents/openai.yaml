@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows windows-design"
-  short_description: "BAA windows windows-design procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

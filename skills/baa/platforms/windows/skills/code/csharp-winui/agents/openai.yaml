@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows csharp-winui"
-  short_description: "BAA windows csharp-winui procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

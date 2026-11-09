@@ -18,14 +18,14 @@ This review checks whether BAA can discover the procedures and resources needed 
 | Apple tests | Shared scheme includes unit and UI targets; UI run uses an isolated defaults domain | New Apple base template and OS screen overlays |
 | Android tests | Unit and Compose UI target; Debug-only isolated UI preferences | New Android template |
 | Android icons | Adaptive foreground/background and monochrome resources for all supported API levels | Manifest -> mipmap resource variants |
-| Agent guidance | CLAUDE.md imports the same AGENTS.md | Both mobile template bases |
+| Agent guidance | CLAUDE.md imports the same AGENTS.md | Mobile and Windows Tauri starters |
 | macOS shipping | Existing-project direct/App Store release procedure | distribute role and Mac router |
 
 The iOS/iPadOS base procedures and references live in apple/shared; each OS's own procedure retains its device-specific requirements. Public entry points remain only baa, baa-apple, baa-android and baa-windows. Internal documents are not registered as extra slash commands.
 
 ## Deliberate platform differences
 
-Mac window management, AppKit panels, global input hooks, Windows UI Automation helpers and desktop socket/pipe servers are not copied into mobile. Mobile agent control uses existing platform automation or UI tests; it is not a promise of a background CLI server.
+Mac window management, AppKit panels, global input hooks, Windows-specific automation and desktop IPC services are not copied into mobile. Mobile agent control uses existing platform automation or UI tests; it is not a promise of a background CLI server.
 
 Built-in screenshot commands and existing project tools are used where they already cover the job. A second generic screenshot/profiling wrapper is not required just because the desktop pack has a script.
 
@@ -44,3 +44,11 @@ Native verification is recorded separately from package checks. Compiling XCTest
 ## Local verification: 2026-11-06
 
 The package suite passed 26 tests, including nested-project rejection and Windows batch line-ending preservation. Fresh iPhone and iPad Simulator-target builds compiled the app, unit-test and UI-test targets with the Debug-only isolated store enabled. The UI tests themselves were not run. A fresh Android project passed Debug and unsigned Release assembly, its unit test, lint and instrumentation-APK compilation. No sample app was installed. The Release APK was checked to exclude the test launch flag. These results do not establish device UI, screen-reader, store or notarization acceptance.
+
+## Windows Tauri scope
+
+Windows roles now use a Rust host, the existing frontend and WebView2. The old desktop-framework template and C# helper assets have been removed; the scaffold uses the common safe generator and a separate dev configuration. All Windows role paths, example plans, UX references and shipping procedures follow Tauri. Windows runtime and installer claims still require a Windows environment. Historical source records stay in LICENSES and are not execution dependencies.
+
+## Local verification: 2026-11-09
+
+The package suite passed 29 tests after the Windows Tauri replacement. A generated starter passed the TypeScript/Vite build, two Rust unit tests and a Tauri dev-config build without bundling, installation or launch on macOS. These are host compilation checks, not Windows runtime, WebView2, installer, accessibility or signing evidence. Original license texts are unchanged.

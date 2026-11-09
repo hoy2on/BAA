@@ -1,5 +1,0 @@
-interface:
-  display_name: "BAA windows design-kit"
-  short_description: "BAA windows design-kit procedure for the assigned platform and task."
-policy:
-  allow_implicit_invocation: false

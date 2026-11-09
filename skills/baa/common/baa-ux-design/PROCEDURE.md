@@ -11,7 +11,7 @@ Resolve follow-up roles with `python3 scripts/resolve.py --entrypoint <entrypoin
 
 The coordinator is the sole editor of shared BRIEF/STORIES/GLOSSARY/research/review documents. Platform owners return proposals and evidence, not concurrent edits. In solo execution, the current worker holds that role.
 
-Use BAMA/BAWA's name → flow → surface → states → copy → supporting explanation → accessibility → UX record. Separate shared meaning from native expression.
+Use BAA's name → flow → surface → states → copy → supporting explanation → accessibility → UX record. Separate shared meaning from native expression.
 Apply [design intelligence](design-intelligence.md) for visual/usability decisions. Evaluate coherent candidates for new direction; target only the relevant outcome for existing-screen problems. Do not regenerate searches/MASTER if the coordinator already supplied verified decisions. Use [UI review](ui-review.md) for changed UI handoff.
 
 ## 1. Read and name
@@ -25,7 +25,7 @@ Write entry → completion → return for every entrypoint. Avoid unnecessary na
 
 ## 3. Pick the surface
 
-Prefer inline edits for current values, nearby choices for short selections, platform-appropriate screens/modals for independent tasks, and established navigation for recurring features. Resolve native-design for specific controls/API/layout and adaptive/multi-window requirements. Mac inspectors/sheets, Windows flyouts/ContentDialog and mobile navigation/sheets are not interchangeable APIs.
+Prefer inline edits for current values, nearby choices for short selections, platform-appropriate screens/modals for independent tasks, and established navigation for recurring features. Resolve native-design for specific controls/API/layout and adaptive/multi-window requirements. Mac inspectors/sheets, Tauri frontend dialogs/native OS dialogs and mobile navigation/sheets have different implementation and focus requirements.
 Do not turn informational status into needless alerts. Modal titles/completion buttons describe the action; define dismissal/return when input can be lost. Confirm actual nested-presentation constraints.
 
 ## 4. Cover states and words

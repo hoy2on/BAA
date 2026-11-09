@@ -5,7 +5,7 @@ description: BAA (Build Any App) central router. Identify app development, desig
 
 # BAA — Build Any App
 
-Read the [execution rules](EXECUTION.md). This plugin includes BAMA/BAWA-based procedures and mobile specialists.
+Read the [execution rules](EXECUTION.md). This plugin includes platform-specific procedures and shared guidance.
 For a direct `/baa` call, the entrypoint is `baa`. When `/baa-apple`, `/baa-android`, or `/baa-windows` delegates here, preserve that entrypoint and its allowed scope.
 Respond in the user's language unless requested otherwise. Follow the project's documentation and localization rules; English internal instructions do not change app copy, existing translations, or the required output language.
 
@@ -39,7 +39,7 @@ python3 <runtime-root>/scripts/resolve.py --entrypoint <entrypoint> --platform <
 ```
 
 `routing.json` is the single role-to-document map. start/plan/code/design/ship are task categories, not mandatory execution order. For iOS/iPadOS, `path` identifies the OS specialist and `references` includes reusable apple/shared guidance. Read the returned PROCEDURE.md and relevant references; do not invoke internal names as Skill-tool or slash commands. All four public entrypoints share these rules.
-macOS uses the BAMA-based pack, Windows the BAWA-based pack, and iOS/iPadOS/Android their specialists.
+Each selected platform uses its own specialist pack. Windows work uses Tauri with a Rust host and the existing web frontend; a non-Tauri project requires an explicitly agreed migration scope.
 
 - New app: research → optional clone → app-brief → user-stories → ux-design (visual direction/interactions) → scaffold → native-design + design-system + app-icon → improve-loop.
 - Existing feature: inspect requirements/current work list → relevant ux-design → code/os-integrations → build-and-verify + test.

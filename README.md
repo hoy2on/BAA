@@ -18,7 +18,6 @@ Agent skills that connect planning, coding, design improvements, builds, and ver
 
 </div>
 
-BAA builds on the macOS workflow from [BAMA](https://github.com/daveebbelaar/bama) and the Windows workflow from [BAWA](https://github.com/daveebbelaar/bawa), adding specialist procedures for iOS, iPadOS, and Android and a central platform router. Install BAA once; separate BAMA and BAWA installations are not required.
 
 ## Quick start
 
@@ -75,12 +74,12 @@ For an existing project, “all” means the supported targets within the comman
 | Area | Procedures |
 | --- | --- |
 | Shared | Research, app briefs, user stories, UX, architecture review, and improvement loops |
-| macOS | BAMA-based Swift, SwiftUI, and AppKit; macOS design, OS integration, performance, builds, and tests |
+| macOS | Swift, SwiftUI, and AppKit; macOS design, OS integration, performance, builds, and tests |
 | iOS and iPadOS | Shared Swift, SwiftUI, and UIKit implementation; device-specific native design, OS integration, performance, builds, tests, and distribution preparation |
 | Android | Kotlin, Compose, and Views; Android design, OS integration, performance, Gradle and adb verification, and distribution preparation |
-| Windows | BAWA-based C# and WinUI; Windows design, OS integration, performance, builds, tests, and distribution |
+| Windows | Tauri 2, Rust, the existing web frontend, and WebView2; Windows design, OS integration, performance, builds, tests, and distribution |
 
-Stages may share names without sharing platform implementations. Existing UIKit, WPF, Views, or cross-platform apps are not converted to match a template. BAA's macOS distribution procedure inspects the project's actual direct-distribution or App Store release workflow.
+Stages may share names without sharing platform implementations. Existing Apple/Android technologies are not converted to match a template. Windows procedures support Tauri only; other technologies require an explicitly agreed migration scope. BAA's macOS distribution procedure inspects the project's actual direct-distribution or App Store release workflow.
 
 ## Install
 
@@ -178,7 +177,7 @@ On Windows, use the plugin or skills CLI installation above.
 
 BAA needs an agent that supports skills. Its resolver uses Python 3.9 or later and the standard library. If Python is unavailable, the agent reads the same `routing.json` to check scope and locate procedures. BAA does not automatically install runtimes or packages just to use a skill.
 
-Building apps requires the tools used by the actual project, such as Xcode and Apple SDKs, Android SDK, JDK and Gradle, or Windows SDK and .NET. BAA does not require every tool to be installed or raise the project's minimum OS version. UI interaction needs available test, device, or computer-use tools.
+Building apps requires the tools used by the actual project, such as Xcode and Apple SDKs, Android SDK, JDK and Gradle, or Rust MSVC, Microsoft C++ build tools, and WebView2. BAA does not require every tool to be installed or raise the project's minimum OS version. UI interaction needs available test, device, or computer-use tools.
 
 Source changes, successful builds, UI execution, and physical-device verification are separate results. Editing Windows code on macOS does not verify Windows execution. iOS and iPadOS need their own target-device evidence. Verification stays pending when the required execution environment is unavailable.
 
@@ -207,8 +206,7 @@ skills/
       android/skills/   Android procedures, grouped by workflow stage
       windows/skills/   Windows procedures, grouped by workflow stage
     scripts/resolve.py
-    LICENSES/          Original BAMA and BAWA licenses
-    UPSTREAM.json      Imported upstream commits
+    LICENSES/          Original licenses and provenance
   baa-apple/           Apple-only entry point
   baa-android/         Android-only entry point
   baa-windows/         Windows-only entry point
@@ -220,7 +218,7 @@ The central skill folder contains its procedures, references, tools, templates, 
 
 Procedures use `start` (entry point and scaffolding), `plan` (reference-app analysis), `code` (implementation, OS integration, performance, and agent CLI), `design` (native UI and design assets), and `ship` (build, test, and distribution). These are task categories, not a required sequence: existing-app work starts at the relevant stage. Platform-independent planning and UX stay in `common/`.
 
-Each Apple OS has its own specialist procedures. iOS and iPadOS each provide all five stages and their own specs; their procedures combine device-specific requirements with reusable bases in `apple/shared/skills/<stage>/`. The resolver returns the OS procedure as `path` and its shared base as `references`. macOS retains its BAMA-based AppKit tools, templates, and desktop specs; those are not interchangeable with UIKit/mobile procedures. `routing.json` is the source of truth for each role's location.
+Each Apple OS has its own specialist procedures. iOS and iPadOS each provide all five stages and their own specs; their procedures combine device-specific requirements with reusable bases in `apple/shared/skills/<stage>/`. The resolver returns the OS procedure as `path` and its shared base as `references`. macOS retains its AppKit tools, templates, and desktop specs; those are not interchangeable with UIKit/mobile procedures. `routing.json` is the source of truth for each role's location.
 
 Optional example plans: [iOS specs](skills/baa/platforms/apple/ios/specs/README.md), [iPadOS specs](skills/baa/platforms/apple/ipados/specs/README.md), and [macOS specs](skills/baa/platforms/apple/macos/specs/README.md). Existing-app work does not require these examples.
 
@@ -230,6 +228,7 @@ The mobile `scaffold` role resolves to `start/new-ios-app`, `start/new-ipados-ap
 python3 skills/baa/scripts/new-app.py ios MyPhoneApp com.example.myphoneapp ~/Developer
 python3 skills/baa/scripts/new-app.py ipados MyPadApp com.example.mypadapp ~/Developer
 python3 skills/baa/scripts/new-app.py android MyAndroidApp com.example.myandroidapp ~/Developer
+python3 skills/baa/scripts/new-app.py windows MyWindowsApp com.example.mywindowsapp ~/Developer
 ```
 
 The generator preserves existing briefs, refuses conflicting files and existing projects, and does not install apps or run Git commands. Apple starters use Swift 6, Xcode 16+, and iOS/iPadOS 17.0+ (`--min-os` can select a higher minimum). The Android starter pins Gradle 8.14.3, AGP 8.11.2, Kotlin 2.3.20, Compose BOM 2025.09.00, compile/target SDK 36, and minSdk 26; confirm the installed toolchain before using it. Existing projects keep their versions. Android's first build may download dependencies; Gradle wrapper licensing is preserved in the template. Product icons and physical-device signing remain follow-up work.
@@ -237,6 +236,8 @@ The generator preserves existing briefs, refuses conflicting files and existing 
 The [platform coverage review](docs/platform-coverage.md) records the filled gaps and intentional differences. Mobile UX/architecture, integration/performance recipes, existing-app verification and screenshot comparison references are connected through the router. Android example plans are in [Android specs](skills/baa/platforms/android/specs/README.md).
 
 For UI work, BAA uses the [design-intelligence workflow](skills/baa/common/baa-ux-design/design-intelligence.md). When ui-ux-pro-max is installed, it uses the actual local skill's relevant searches, validates their platform/stack fit, and passes accepted decisions to platform specialists. New visual direction uses a coherent design-system candidate; existing-screen fixes keep the current system and use a targeted query. The coordinator preserves existing master/page decisions and writes shared changes once. Native-aware [UI review](skills/baa/common/baa-ux-design/ui-review.md) connects to verification. BAA's packaged criteria remain available without the external skill; its search database is not bundled or auto-installed.
+
+Windows starters use a TypeScript/Vite frontend, a Rust host, and a separate `.dev` configuration. Existing Tauri apps retain their frontend. Actual Windows builds and runtime checks require a Windows environment; browser previews establish only frontend behavior.
 
 ## Development and verification
 
@@ -254,6 +255,4 @@ BAA uses Git commits for updates and does not declare a numeric version. Some va
 
 ## Credits and license
 
-[MIT](LICENSE). BAA is based on [BAMA](https://github.com/daveebbelaar/bama) and [BAWA](https://github.com/daveebbelaar/bawa) by [Dave Ebbelaar](https://github.com/daveebbelaar). It preserves upstream specialist procedures, references, and templates while integrating a central router, shared procedures, and mobile specialist procedures.
-
-Imported commits are recorded in [UPSTREAM.json](skills/baa/UPSTREAM.json). Original terms are preserved in the [macOS license](skills/baa/LICENSES/macos-upstream.txt) and [Windows license](skills/baa/LICENSES/windows-upstream.txt). See the upstream projects for REA and their other references.
+[MIT](LICENSE). BAA draws on [BAMA](https://github.com/daveebbelaar/bama) and [BAWA](https://github.com/daveebbelaar/bawa) by [Dave Ebbelaar](https://github.com/daveebbelaar). Original license terms and imported commit records are preserved in [LICENSES](skills/baa/LICENSES).

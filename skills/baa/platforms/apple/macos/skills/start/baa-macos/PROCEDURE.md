@@ -5,7 +5,7 @@ description: Build any Mac app. Start here to pick the next skill for a native m
 
 ## BAA execution context
 
-Read [BAA execution rules](../../../../../../EXECUTION.md) before this platform procedure. This skill belongs to the macos pack. Preserve the selected platform, task type, ownership and verification environment. Resolve all follow-up skills through BAA, never an external BAMA/BAWA installation. Existing project settings and dev-install rules override template examples.
+Read [BAA execution rules](../../../../../../EXECUTION.md) before this platform procedure. This skill belongs to the macos pack. Preserve the selected platform, task type, ownership and verification environment. Resolve follow-up procedures within the current BAA package. Existing project settings and dev-install rules override template examples.
 
 
 # Build any Mac app
@@ -32,7 +32,7 @@ view, and the real icon in every snapshot.
 | A vague idea, or asks "what should I build" | `baa-research`, then `baa-app-brief` |
 | An app they want to replace or rebuild | `baa-macos-clone` |
 | A brief or a screen index, no backlog | `baa-user-stories` |
-| A spec from BAMA's `specs/` folder | `baa-app-brief` (it copies the spec) |
+| A spec from BAA's `specs/` folder | `baa-app-brief` (it copies the spec) |
 
 ## Build
 

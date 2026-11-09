@@ -18,7 +18,6 @@ Apple · Android · Windows<br>
 
 </div>
 
-BAA는 [BAMA](https://github.com/daveebbelaar/bama)의 macOS 개발 흐름과 [BAWA](https://github.com/daveebbelaar/bawa)의 Windows 개발 흐름을 바탕으로, iOS·iPadOS·Android 전문 절차와 중앙 플랫폼 라우터를 더한 프로젝트입니다. 별도 BAMA·BAWA 설치 없이 BAA 하나를 사용합니다.
 
 ## 빠른 시작
 
@@ -75,12 +74,12 @@ BAA 중앙 라우터 → 플랫폼 담당 절차 → 현재 작업에 필요한 
 | 영역 | 사용하는 절차 |
 | --- | --- |
 | 공통 | 조사, 앱 개요, 사용자 스토리, UX, 구조 검토, 개선 순환 |
-| macOS | BAMA 기반 Swift·SwiftUI·AppKit, macOS 디자인, OS 연동, 성능, 빌드·테스트·배포 |
+| macOS | Swift·SwiftUI·AppKit, macOS 디자인, OS 연동, 성능, 빌드·테스트·배포 |
 | iOS·iPadOS | Swift·SwiftUI·UIKit 공유 구현, 기기별 네이티브 디자인, OS 연동, 성능, 빌드·테스트·배포 준비 |
 | Android | Kotlin·Compose·Views, Android 디자인, OS 연동, 성능, Gradle·adb 검증, 배포 준비 |
-| Windows | BAWA 기반 C#·WinUI, Windows 디자인, OS 연동, 성능, 빌드·테스트·배포 |
+| Windows | Tauri 2·Rust·기존 웹 프런트엔드·WebView2, Windows 디자인, OS 연동, 성능, 빌드·테스트·배포 |
 
-단계 이름이 같아도 플랫폼별 구현을 합치지 않습니다. 기존 앱의 UIKit·WPF·Views·크로스플랫폼 기술을 템플릿에 맞춰 바꾸지 않습니다. macOS 배포 절차는 실제 프로젝트의 직접 배포·App Store 릴리즈 방식을 조사해 사용합니다.
+단계 이름이 같아도 플랫폼별 구현을 합치지 않습니다. Apple·Android 기존 앱의 기술을 템플릿에 맞춰 바꾸지 않습니다. Windows는 Tauri만 지원하며 다른 기술의 프로젝트는 명시적으로 이전 범위를 합의한 후에 변경합니다. macOS 배포 절차는 실제 프로젝트의 직접 배포·App Store 릴리즈 방식을 조사해 사용합니다.
 
 ## 설치
 
@@ -178,7 +177,7 @@ Windows에서는 위 플러그인 또는 skills CLI 설치를 사용하세요.
 
 BAA는 스킬을 지원하는 에이전트가 필요하며, resolver는 Python 3.9 이상과 표준 라이브러리를 사용합니다. Python이 없으면 에이전트가 같은 `routing.json`에서 허용 범위와 연결 문서를 직접 확인합니다. 스킬 사용을 위해 런타임이나 패키지를 자동 설치하지 않습니다.
 
-앱 빌드에는 실제 프로젝트가 사용하는 Xcode·Apple SDK, Android SDK·JDK·Gradle, Windows SDK·.NET 등의 도구가 별도로 필요합니다. 모든 도구를 설치하거나 최소 OS를 올리도록 강제하지 않습니다. UI 조작에는 실제 사용 가능한 테스트·기기·컴퓨터 조작 도구가 필요합니다.
+앱 빌드에는 실제 프로젝트가 사용하는 Xcode·Apple SDK, Android SDK·JDK·Gradle, Rust MSVC·Microsoft C++ 빌드 도구·WebView2 등의 도구가 별도로 필요합니다. 모든 도구를 설치하거나 최소 OS를 올리도록 강제하지 않습니다. UI 조작에는 실제 사용 가능한 테스트·기기·컴퓨터 조작 도구가 필요합니다.
 
 소스 수정, 빌드 성공, UI 실행, 실기기 검증을 구분합니다. macOS에서 Windows 코드를 수정했다고 Windows 실행을 검증한 것은 아닙니다. iOS와 iPadOS도 대상 기기를 각각 확인합니다. 실행 환경이 없으면 해당 검증을 대기로 남깁니다.
 
@@ -207,8 +206,7 @@ skills/
       android/skills/   단계별 Android 절차
       windows/skills/   단계별 Windows 절차
     scripts/resolve.py
-    LICENSES/          BAMA·BAWA 원본 라이선스
-    UPSTREAM.json      가져온 원본 commit
+    LICENSES/          원본 라이선스·출처 기록
   baa-apple/           Apple 전용 진입점
   baa-android/         Android 전용 진입점
   baa-windows/         Windows 전용 진입점
@@ -220,7 +218,7 @@ tests/                 연결·설치·개발 앱 보호 검사
 
 절차는 `start`(진입점·앱 생성), `plan`(참고 앱 분석), `code`(구현·OS 연동·성능·agent CLI), `design`(네이티브 UI·디자인 자료), `ship`(빌드·테스트·배포)으로 나눕니다. 강제 순서가 아닌 목적별 분류이므로 기존 앱에서는 필요한 단계부터 시작합니다. 플랫폼 독립 기획·UX는 `common/`을 사용합니다.
 
-Apple의 각 OS는 자체 전문 절차를 갖습니다. iOS·iPadOS 각각 다섯 단계와 specs를 갖추고, 전문 절차에서 기기별 요구사항과 `apple/shared/skills/<단계>/`의 공통 기반 지침을 함께 적용합니다. resolver는 OS 전문 절차를 `path`, 공유 기반 절차를 `references`로 반환합니다. macOS의 BAMA 기반 AppKit 도구·템플릿·데스크톱 예제는 UIKit·모바일 절차와 다르므로 유지합니다. 역할별 실제 위치는 `routing.json`을 기준으로 확인합니다.
+Apple의 각 OS는 자체 전문 절차를 갖습니다. iOS·iPadOS 각각 다섯 단계와 specs를 갖추고, 전문 절차에서 기기별 요구사항과 `apple/shared/skills/<단계>/`의 공통 기반 지침을 함께 적용합니다. resolver는 OS 전문 절차를 `path`, 공유 기반 절차를 `references`로 반환합니다. macOS의 AppKit 도구·템플릿·데스크톱 예제는 UIKit·모바일 절차와 다르므로 유지합니다. 역할별 실제 위치는 `routing.json`을 기준으로 확인합니다.
 
 선택적으로 사용할 예제 기획서는 [iOS specs](skills/baa/platforms/apple/ios/specs/README.md), [iPadOS specs](skills/baa/platforms/apple/ipados/specs/README.md), [macOS specs](skills/baa/platforms/apple/macos/specs/README.md)에 있습니다. 기존 앱 작업에서는 예제를 강제하지 않습니다.
 
@@ -230,6 +228,7 @@ Apple의 각 OS는 자체 전문 절차를 갖습니다. iOS·iPadOS 각각 다�
 python3 skills/baa/scripts/new-app.py ios MyPhoneApp com.example.myphoneapp ~/Developer
 python3 skills/baa/scripts/new-app.py ipados MyPadApp com.example.mypadapp ~/Developer
 python3 skills/baa/scripts/new-app.py android MyAndroidApp com.example.myandroidapp ~/Developer
+python3 skills/baa/scripts/new-app.py windows MyWindowsApp com.example.mywindowsapp ~/Developer
 ```
 
 생성기는 기존 기획 문서를 보존하고 파일·프로젝트 충돌 시 중단하며, 앱 설치나 Git 명령은 실행하지 않습니다. Apple 신규 템플릿 기준은 Swift 6·Xcode 16 이상·iOS/iPadOS 17.0 이상이며 `--min-os`로 더 높은 최소 OS를 지정할 수 있습니다. Android는 Gradle 8.14.3·AGP 8.11.2·Kotlin 2.3.20·Compose BOM 2025.09.00·compile/target SDK 36·minSdk 26을 고정하며 사용 전 실제 설치 도구를 확인합니다. 기존 프로젝트의 버전은 유지합니다. Android 첫 빌드는 의존성을 다운로드할 수 있고 Gradle 라이선스를 템플릿에 보존합니다. 제품 아이콘과 실기기 서명 설정은 후속 작업입니다.
@@ -237,6 +236,8 @@ python3 skills/baa/scripts/new-app.py android MyAndroidApp com.example.myandroid
 [플랫폼 구성 점검 기록](docs/platform-coverage.md)에 보완 항목과 의도적으로 구분한 차이를 정리했습니다. 모바일 UX·구조 검토·OS 연동·성능·기존 앱 검증·화면 비교 자료를 라우팅에 연결했고, [Android specs](skills/baa/platforms/android/specs/README.md)도 추가했습니다.
 
 UI 작업에는 [디자인 검색·결정 흐름](skills/baa/common/baa-ux-design/design-intelligence.md)을 적용합니다. ui-ux-pro-max가 설치되어 있으면 실제 로컬 스킬에서 필요한 검색을 수행하고 플랫폼·기술 적합성을 확인한 결정만 담당자에게 전달합니다. 신규 시각 방향은 디자인 시스템 후보를 검토하고, 기존 화면의 작은 수정은 기존 체계를 유지하며 해당 문제만 검색합니다. 조율자가 기존 MASTER·화면별 결정을 보존하고 공통 문서를 한 번만 갱신합니다. [UI 검토 기준](skills/baa/common/baa-ux-design/ui-review.md)은 네이티브 플랫폼에 맞춰 검증 단계에 연결됩니다. 외부 스킬이 없어도 BAA 내장 기준으로 진행하며 검색 DB를 포함하거나 자동 설치하지 않습니다.
+
+Windows 새 앱은 TypeScript/Vite 화면과 Rust 호스트, 별도 `.dev` 설정으로 생성합니다. 기존 앱의 프런트엔드는 유지합니다. 실제 Windows 빌드·실행은 Windows 환경에서 검증하며 웹 미리보기와 구분합니다.
 
 ## 개발과 검증
 
@@ -254,6 +255,4 @@ python3 skills/baa/scripts/resolve.py --entrypoint baa-android --platform androi
 
 ## 출처와 라이선스
 
-[MIT](LICENSE). BAA는 [Dave Ebbelaar](https://github.com/daveebbelaar)의 [BAMA](https://github.com/daveebbelaar/bama)와 [BAWA](https://github.com/daveebbelaar/bawa)를 기반으로 합니다. 원본의 전문 절차와 참고 자료·템플릿을 보존하며 중앙 라우터, 공통 절차와 모바일 전문 절차를 통합했습니다.
-
-가져온 원본 commit은 [UPSTREAM.json](skills/baa/UPSTREAM.json), 원본 사용 조건은 [macOS 라이선스](skills/baa/LICENSES/macos-upstream.txt)와 [Windows 라이선스](skills/baa/LICENSES/windows-upstream.txt)에 기록되어 있습니다. 원본 프로젝트가 소개한 REA와 기타 참고 자료는 해당 프로젝트의 문서를 참고하세요.
+[MIT](LICENSE). BAA는 [Dave Ebbelaar](https://github.com/daveebbelaar)의 [BAMA](https://github.com/daveebbelaar/bama)와 [BAWA](https://github.com/daveebbelaar/bawa)를 참고했습니다. 원본 사용 조건과 가져온 commit은 [라이선스 폴더](skills/baa/LICENSES)에 보존합니다.
